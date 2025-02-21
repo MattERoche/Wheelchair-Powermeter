@@ -12,6 +12,10 @@ try:
 except ImportError:
     pass
 
+__version__ = "0.0.0+auto.0"
+__repo__ = "https://github.com/EzrSchwartz/CircuitPython_BLE_Cycling_Power_Service.git"
+
+
 CPMeasurementValues = namedtuple(
     "CPMeasurementValues",
     ("value" "ByteArray"),
@@ -81,4 +85,3 @@ class CyclingPowerService(Service):
         ByteArray = "".join("{:02x}".format(x) for x in self._measurement_buf)
 
         return ByteArray
-
