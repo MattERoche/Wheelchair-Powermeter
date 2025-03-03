@@ -179,7 +179,7 @@ def Stop_logging():
 
 def headers(datalog):
     if datalog.tell() == 0:
-        datalog.write('Time,A_X,A_Y,A_Z,G_X,G_Y,G_Z,Temperature,AirDensity,vSpeed,RPS,Delta_Pressure,wind_speed_ms,power\n')
+        datalog.write('Time,A_X,A_Y,A_Z,G_X,G_Y,G_Z,Temperature,AirDensity,vSpeed,RPS,Delta_Pressure,wind_speed_ms,power,cadence\n')
 
 
 def record():
@@ -246,10 +246,9 @@ while True:
         wind_speed_ms = wind_Speed()
 
         Start_file()
-
         if log_file:
             if current_time - Last_Log >= SENSOR_SAMPLING_INTERVAL:
-                log_file.write(f'{current_time:.3f},{A_X:.2f},{A_Y:.2f},{A_Z:.2f},{G_X:.2f},{G_Y:.2f},{G_Z:.2f},{temperature:.1f},{density:.2f},{last_vSpeed:.2f},{last_rps:.2f},{pressure_PA:.2f},{wind_speed_ms:.1f},{current_power:.2f}\n')
+                log_file.write(f'{current_time:.3f},{A_X:.2f},{A_Y:.2f},{A_Z:.2f},{G_X:.2f},{G_Y:.2f},{G_Z:.2f},{temperature:.1f},{density:.2f},{last_vSpeed:.2f},{last_rps:.2f},{pressure_PA:.2f},{wind_speed_ms:.1f},{last_power:.2f},{last_cadence:.1f}\n')
                 Last_Log = current_time
 
     record()
