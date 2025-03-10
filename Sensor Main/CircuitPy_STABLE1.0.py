@@ -54,43 +54,15 @@ previous_button_state = False
 log_file = None
 directory = "/sd"
 file_name = None
-# Sampling intervals
-MAIN_SAMPLING_INTERVAL = 0.01  # 100Hz main loop
-MPL3115_SAMPLING_INTERVAL = 1.0  # 1Hz for temperature/pressure
-AIRSPEED_SAMPLING_INTERVAL = 0.02  # 50Hz for airspeed
-BUFFER_SIZE = 50  # Number of samples to buffer before writing
+
 last_CSC_update = 0
 last_sensor_update = 0
 CSC_SAMPLING_INTERVAL = 0.1
 SENSOR_SAMPLING_INTERVAL = 0.001
 Last_Log = 0
 
-# Last update timestamps
-last_mpl3115_update = 0
-last_airspeed_update = 0
-
-# Cached sensor values
-cached_temperature = 0
-cached_pressure = 0
-cached_density = 0
-cached_pressure_PA = 0
-cached_wind_speed = 0
-
 last_vSpeed = 0.0
 last_rps = 0.0
-
-class SensorData:
-    def __init__(self):
-        self.temperature = 0
-        self.pressure = 0
-        self.density = 0
-        self.pressure_PA = 0
-        self.wind_speed = 0
-        self.accell = (0, 0, 0)
-        self.gyro = (0, 0, 0)
-
-sensor_data = SensorData()
-sensor_buffer = []
 
 def BLE_CSCConn():
     global csc_connection
@@ -110,6 +82,7 @@ def BLE_CSCConn():
                 except Exception as e:
                     print("Connection failed:", e)
         print("CSC sensor not found, retrying...")
+        pixels[0] = (10, 10, 0)
         ble.stop_scan()
         time.sleep(5)
 
@@ -133,6 +106,7 @@ def CSC_Data():
                 previous_wheel_revolutions = wheel_revolutions
                 previous_event_time = event_time
                 last_CSC_update = time.monotonic()
+                pixels[0] = (0, 10, 0)
         except (IndexError, AttributeError, OSError) as e:
             print("CSC error:", e)
             if isinstance(e, OSError):
@@ -141,7 +115,7 @@ def CSC_Data():
     if time.monotonic() - last_CSC_update > 1.0:
         last_vSpeed = 0.0
         last_rps = 0.0
-
+        pixels[0] = (10, 10, 0)
 
 def BLE_PowerMeterConn():
     global power_meter_connection
@@ -180,7 +154,6 @@ def Power_Data():
             print("No power data received")
 
     except Exception as e:
-        pixels = (10,0,0)
         print(f"Power data error: {e}")
         power_meter_connection = None
 
@@ -235,7 +208,7 @@ def read_pressure_ms4525do():
         i2c.unlock()
         raw_pressure = ((data[0] & 0x3F) << 8) | data[1]
         pressure_psi = ((raw_pressure - 8192) / 16384) * 15
-        pressure_PA = round(-1*((pressure_psi*6894.76)-284),1)
+        pressure_PA = round(((-1*(pressure_psi*6894.76))-284),0)
         return pressure_PA
     except Exception as e:
         print("MS4525DO Read Error:", e)
@@ -248,110 +221,38 @@ def wind_Speed():
         wind_speed_ms = 0
     return wind_speed_ms
 
-
-def update_mpl3115():
-    """Update MPL3115 readings (1Hz)"""
-    global cached_temperature, cached_pressure, cached_density
-    try:
-        cached_temperature = sensor.temperature
-        cached_pressure = sensor.pressure
-        pascals = cached_pressure * 100
-        cached_density = pascals / ((cached_temperature + 273) * 287)
-        return True
-    except Exception as e:
-        print("MPL3115 read error:", e)
-        return False
-
-def update_airspeed():
-    """Update airspeed sensor readings (50Hz)"""
-    global cached_pressure_PA, cached_wind_speed
-    try:
-        cached_pressure_PA = read_pressure_ms4525do()
-        if cached_pressure_PA >= 0:
-            cached_wind_speed = ((2 * cached_pressure_PA) / cached_density) ** (1/2)
-        else:
-            cached_wind_speed = 0
-        return True
-    except Exception as e:
-        print("Airspeed sensor read error:", e)
-        return False
-
-def update_icm20x():
-    """Update ICM20X readings (100Hz)"""
-    try:
-        sensor_data.accell = icm.acceleration
-        sensor_data.gyro = icm.gyro
-        return True
-    except Exception as e:
-        print("ICM20X read error:", e)
-        return False
-
-def write_buffer_to_file():
-    """Write buffered data to file"""
-    global sensor_buffer
-    if log_file and sensor_buffer:
-        try:
-            log_file.write(''.join(sensor_buffer))
-            sensor_buffer.clear()
-        except OSError as e:
-            print("File write error:", e)
-
-# Modified main loop
-next_sensor_update = time.monotonic()
-
-
 BLE_CSCConn()
 BLE_PowerMeterConn()
 
 while True:
     current_time = time.monotonic()
-
-    # Main 100Hz loop
-    if current_time >= next_sensor_update:
-        next_sensor_update = current_time + MAIN_SAMPLING_INTERVAL
-
-        # Update ICM20X at 100Hz
-        icm_updated = update_icm20x()
-
-        # Update airspeed sensor at 50Hz
-        if current_time - last_airspeed_update >= AIRSPEED_SAMPLING_INTERVAL:
-            update_airspeed()
-            last_airspeed_update = current_time
-
-        # Update MPL3115 at 1Hz
-        if current_time - last_mpl3115_update >= MPL3115_SAMPLING_INTERVAL:
-            update_mpl3115()
-            last_mpl3115_update = current_time
-
-        # Log data at 100Hz if recording
-        if State_Record and icm_updated:
-            A_X, A_Y, A_Z = sensor_data.accell
-            G_X, G_Y, G_Z = sensor_data.gyro
-
-# Format data string with latest sensor values
-            data_str = f'{current_time:.3f},{A_X:.2f},{A_Y:.2f},{A_Z:.2f},{G_X:.2f},{G_Y:.2f},{G_Z:.2f},{cached_temperature:.1f},{cached_density:.2f},{last_vSpeed:.2f},{last_rps:.2f},{cached_pressure_PA:.2f},{cached_wind_speed:.1f},{last_power:.2f},{last_cadence:.1f}\n'
-
-            sensor_buffer.append(data_str)
-
-            # Write buffer when full
-            if len(sensor_buffer) >= BUFFER_SIZE:
-                write_buffer_to_file()
-
-    # BLE updates (keep existing BLE timing)
-    if current_time - last_CSC_update >= CSC_SAMPLING_INTERVAL:
-        CSC_Data()
-        Power_Data()
-        last_CSC_update = current_time
-
-    # Button handling and LED updates
-    record()A
     LED_Rec()
 
-    # File management
-    if State_Record and log_file is None:
-        Start_file()
-    elif State_Record == 0 and log_file:
-        write_buffer_to_file()
-        Stop_logging()
+    if current_time - last_CSC_update >= CSC_SAMPLING_INTERVAL:
+        last_CSC_update += CSC_SAMPLING_INTERVAL
+        CSC_Data()
+        Power_Data()
 
+    if current_time - last_sensor_update >= SENSOR_SAMPLING_INTERVAL:
+        last_sensor_update += SENSOR_SAMPLING_INTERVAL
+        accell = icm.acceleration
+        gyro = icm.gyro
+        pressure = sensor.pressure
+        temperature = sensor.temperature
+        pressure_PA = read_pressure_ms4525do()
+        A_X, A_Y, A_Z = accell
+        G_X, G_Y, G_Z = gyro
+        pascals = pressure * 100
+        density = pascals / ((temperature + 273) * 287)
+        wind_speed_ms = wind_Speed()
+
+        Start_file()
+        if log_file:
+            if current_time - Last_Log >= SENSOR_SAMPLING_INTERVAL:
+                log_file.write(f'{current_time:.3f},{A_X:.2f},{A_Y:.2f},{A_Z:.2f},{G_X:.2f},{G_Y:.2f},{G_Z:.2f},{temperature:.1f},{density:.2f},{last_vSpeed:.2f},{last_rps:.2f},{pressure_PA:.2f},{wind_speed_ms:.1f},{last_power:.2f},{last_cadence:.1f}\n')
+                Last_Log = current_time
+
+    record()
+    if State_Record == 0 and log_file:
+        Stop_logging()
 

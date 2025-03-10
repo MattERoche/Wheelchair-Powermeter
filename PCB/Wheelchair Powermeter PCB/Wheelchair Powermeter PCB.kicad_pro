@@ -58,20 +58,7 @@
           "width": 0.0
         }
       ],
-      "drc_exclusions": [
-        [
-          "silk_edge_clearance|81855000|59760000|88039ed5-6bd9-4174-86db-a5e0d3ac1b17|32e7d7e7-415e-460e-809a-c6f93b5f8f68",
-          ""
-        ],
-        [
-          "silk_edge_clearance|81855000|59760000|88039ed5-6bd9-4174-86db-a5e0d3ac1b17|d2fbbeed-b068-4381-8270-d8d0b67adb9e",
-          ""
-        ],
-        [
-          "silk_edge_clearance|90795000|59760000|88039ed5-6bd9-4174-86db-a5e0d3ac1b17|56f0c61b-46cd-4a5d-bdc3-75c1f8f397b3",
-          ""
-        ]
-      ],
+      "drc_exclusions": [],
       "meta": {
         "version": 2
       },
@@ -514,7 +501,7 @@
       "plot": "Fabrication files/",
       "pos_files": "",
       "specctra_dsn": "",
-      "step": "",
+      "step": "Wheelchair Powermeter PCB.step",
       "svg": "",
       "vrml": ""
     },
