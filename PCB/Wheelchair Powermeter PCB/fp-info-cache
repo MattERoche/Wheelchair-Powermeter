@@ -1,4 +1,4 @@
-24749536384003208
+24754766845476822
 Adafruit
 4525-DP
 
@@ -21,6 +21,13 @@ ESP32 V3
 30
 30
 Adafruit
+ESP32-S3
+
+
+0
+28
+28
+Adafruit
 GCT_USB4085-GF-A_REVB
 
 
@@ -41,6 +48,20 @@ MPL311
 0
 7
 7
+Adafruit
+SPI Screen Pad
+
+
+0
+0
+0
+Adafruit
+SPI_Screen
+
+
+0
+8
+8
 Adafruit
 TE_4525-DS5A001DP
 

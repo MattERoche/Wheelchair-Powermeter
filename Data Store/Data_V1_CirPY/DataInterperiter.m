@@ -121,7 +121,7 @@ legend('Power','Bike Powermeter')
 hold off;
 
 nexttile([1 4])
-plot(timeZero,Windy, 'LineWidth',2);
+plot(timeZero,Windy, 'LineWidth',2);4
 hold on
 plot(timeZero, vChairX, 'LineWidth',2)
 xlabel('Time (s)');

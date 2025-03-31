@@ -1,0 +1,818 @@
+﻿STEP to UG
+! INFO-     NX STEP AP203 - V2406.3002
+! INFO-      
+! INFO-     Start of Translation: 29-MAR-2025  9:40:21 PM
+! INFO-      
+! STATUS-   Converting Part: C:\LocalDocs\Wheelchair-Powermeter\PCB\Wheelchair Powermeter PCB\Wheelchair Powermeter PCBV2.step
+! SUMMARY-   
+! SUMMARY-    STEP Header Information
+! SUMMARY-   
+! SUMMARY-  Description      KiCad electronic assembly
+! SUMMARY-  Imp_Level        2;1
+! SUMMARY-  File_Name        Wheelchair Powermeter PCBV2.step
+! SUMMARY-  Date             2025-03-29T21:35:33
+! SUMMARY-  Author           Pcbnew
+! SUMMARY-  Organization     Kicad
+! SUMMARY-  Pre_Version      Open CASCADE STEP processor 7.8
+! SUMMARY-  Orig_System      KiCad to STEP converter
+! SUMMARY-  Authorization    Unknown
+! SUMMARY-  Schema_ID        automotive_design
+! SUMMARY-   
+! SUMMARY-    Summary of STEP Entities
+! SUMMARY-   
+! SUMMARY-  Entity Type                                                   Count
+! SUMMARY-  -----------                                                   ------
+! SUMMARY-  advanced_brep_shape_representation .........................:     15
+! SUMMARY-  advanced_face ..............................................:   5488
+! SUMMARY-  application_context ........................................:      1
+! SUMMARY-  axis1_placement ............................................:      4
+! SUMMARY-  axis2_placement_3d .........................................:   7783
+! SUMMARY-  b_spline_curve_with_knots ..................................:    250
+! SUMMARY-  b_spline_curve_with_knots_and_rational_b_spline_curve ......:     32
+! SUMMARY-  b_spline_surface_with_knots ................................:     88
+! SUMMARY-  b_spline_surface_with_knots_and_rational_b_spline_surface ..:     32
+! SUMMARY-  cartesian_point ............................................:  34444
+! SUMMARY-  circle .....................................................:   2307
+! SUMMARY-  closed_shell ...............................................:    264
+! SUMMARY-  conical_surface ............................................:     17
+! SUMMARY-  context_dependent_shape_representation .....................:     48
+! SUMMARY-  cylindrical_surface ........................................:   1079
+! SUMMARY-  direction ..................................................:  26821
+! SUMMARY-  edge_curve .................................................:  13899
+! SUMMARY-  edge_loop ..................................................:   6275
+! SUMMARY-  ellipse ....................................................:     63
+! SUMMARY-  face_bound .................................................:   6275
+! SUMMARY-  geometric_representation_context_and_global_uncertainty_a ..:     32
+! SUMMARY-  item_defined_transformation ................................:     48
+! SUMMARY-  length_unit_and_si_unit ....................................:     32
+! SUMMARY-  line .......................................................:  11251
+! SUMMARY-  manifold_solid_brep ........................................:    264
+! SUMMARY-  next_assembly_usage_occurrence .............................:     48
+! SUMMARY-  open_shell .................................................:      2
+! SUMMARY-  oriented_edge ..............................................:  27796
+! SUMMARY-  plane ......................................................:   4159
+! SUMMARY-  plane_angle_unit_and_si_unit ...............................:     32
+! SUMMARY-  product ....................................................:     32
+! SUMMARY-  product_context ............................................:     32
+! SUMMARY-  product_definition .........................................:     32
+! SUMMARY-  product_definition_context .................................:     32
+! SUMMARY-  product_definition_formation ...............................:     32
+! SUMMARY-  product_definition_shape ...................................:     80
+! SUMMARY-  product_related_product_category ...........................:     32
+! SUMMARY-  representation_relationship_with_transformation_and_shape ..:     48
+! SUMMARY-  shape_representation .......................................:     17
+! SUMMARY-  shell_based_surface_model ..................................:      2
+! SUMMARY-  si_unit_and_solid_angle_unit ...............................:     32
+! SUMMARY-  spherical_surface ..........................................:     34
+! SUMMARY-  surface_of_revolution ......................................:      4
+! SUMMARY-  toroidal_surface ...........................................:     75
+! SUMMARY-  uncertainty_measure_with_unit ..............................:     32
+! SUMMARY-  vector .....................................................:  11251
+! SUMMARY-  vertex_point ...............................................:   9074
+! SUMMARY-                                                               -------
+! SUMMARY-  Total                                                         169690
+! STATUS-    
+! STATUS-   Converting to Output Form (Phase 2 of 3): 29-MAR-2025 9:40:22 PM
+! STATUS-    
+! STATUS-    
+! STATUS-   Generating UG geometry and placing them in parts
+! STATUS-    
+! STATUS-   Creating the UG part (Phase 3 of 3): 29-MAR-2025  9:40:28 PM
+! INFO-     Filing Part ..: C:\LocalDocs\Wheelchair-Powermeter\PCB\PCB CASE\PCBCASE_V2\Wheelchair Powermeter PCB_PCB
+! SUMMARY-   
+! SUMMARY-  Summary of Unigraphics Part Entities
+! SUMMARY-   
+! SUMMARY-  Entities Processed             Count
+! SUMMARY-  ------------------             -----
+! SUMMARY-  Solid/Sheet .................:     1
+! SUMMARY-                                 -----
+! SUMMARY-  Total                              1
+! STATUS-   Creating the UG part (Phase 3 of 3): 29-MAR-2025  9:40:29 PM
+! INFO-     Filing Part ..: C:\LocalDocs\Wheelchair-Powermeter\PCB\PCB CASE\PCBCASE_V2\R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal
+! SUMMARY-   
+! SUMMARY-  Summary of Unigraphics Part Entities
+! SUMMARY-   
+! SUMMARY-  Entities Processed             Count
+! SUMMARY-  ------------------             -----
+! SUMMARY-  Solid/Sheet .................:     1
+! SUMMARY-                                 -----
+! SUMMARY-  Total                              1
+! STATUS-   Creating the UG part (Phase 3 of 3): 29-MAR-2025  9:40:29 PM
+! INFO-     Filing Part ..: C:\LocalDocs\Wheelchair-Powermeter\PCB\PCB CASE\PCBCASE_V2\qwicc v1
+! SUMMARY-   
+! SUMMARY-  Summary of Unigraphics Part Entities
+! SUMMARY-   
+! SUMMARY-  Entities Processed             Count
+! SUMMARY-  ------------------             -----
+! SUMMARY-  Solid/Sheet .................:     7
+! SUMMARY-                                 -----
+! SUMMARY-  Total                              7
+! STATUS-   Creating the UG part (Phase 3 of 3): 29-MAR-2025  9:40:29 PM
+! INFO-     Filing Part ..: C:\LocalDocs\Wheelchair-Powermeter\PCB\PCB CASE\PCBCASE_V2\YC164_RESPACK v1
+! SUMMARY-   
+! SUMMARY-  Summary of Unigraphics Part Entities
+! SUMMARY-   
+! SUMMARY-  Entities Processed             Count
+! SUMMARY-  ------------------             -----
+! SUMMARY-  Solid/Sheet .................:     1
+! SUMMARY-                                 -----
+! SUMMARY-  Total                              1
+! STATUS-   Creating the UG part (Phase 3 of 3): 29-MAR-2025  9:40:29 PM
+! INFO-     Filing Part ..: C:\LocalDocs\Wheelchair-Powermeter\PCB\PCB CASE\PCBCASE_V2\RESC-0603 v1
+! SUMMARY-   
+! SUMMARY-  Summary of Unigraphics Part Entities
+! SUMMARY-   
+! SUMMARY-  Entities Processed             Count
+! SUMMARY-  ------------------             -----
+! SUMMARY-  Solid/Sheet .................:     3
+! SUMMARY-                                 -----
+! SUMMARY-  Total                              3
+! STATUS-   Creating the UG part (Phase 3 of 3): 29-MAR-2025  9:40:29 PM
+! INFO-     Filing Part ..: C:\LocalDocs\Wheelchair-Powermeter\PCB\PCB CASE\PCBCASE_V2\CAPC-0805-T0.95-BN v1
+! SUMMARY-   
+! SUMMARY-  Summary of Unigraphics Part Entities
+! SUMMARY-   
+! SUMMARY-  Entities Processed             Count
+! SUMMARY-  ------------------             -----
+! SUMMARY-  Solid/Sheet .................:     1
+! SUMMARY-                                 -----
+! SUMMARY-  Total                              1
+! STATUS-   Creating the UG part (Phase 3 of 3): 29-MAR-2025  9:40:29 PM
+! INFO-     Filing Part ..: C:\LocalDocs\Wheelchair-Powermeter\PCB\PCB CASE\PCBCASE_V2\CAPC-0603-T0.9-BN v1
+! SUMMARY-   
+! SUMMARY-  Summary of Unigraphics Part Entities
+! SUMMARY-   
+! SUMMARY-  Entities Processed             Count
+! SUMMARY-  ------------------             -----
+! SUMMARY-  Solid/Sheet .................:     1
+! SUMMARY-                                 -----
+! SUMMARY-  Total                              1
+! STATUS-   Creating the UG part (Phase 3 of 3): 29-MAR-2025  9:40:29 PM
+! INFO-     Filing Part ..: C:\LocalDocs\Wheelchair-Powermeter\PCB\PCB CASE\PCBCASE_V2\Body
+! SUMMARY-   
+! SUMMARY-  Summary of Unigraphics Part Entities
+! SUMMARY-   
+! SUMMARY-  Entities Processed             Count
+! SUMMARY-  ------------------             -----
+! SUMMARY-  Solid/Sheet .................:     1
+! SUMMARY-                                 -----
+! SUMMARY-  Total                              1
+! STATUS-   Creating the UG part (Phase 3 of 3): 29-MAR-2025  9:40:29 PM
+! INFO-     Filing Part ..: C:\LocalDocs\Wheelchair-Powermeter\PCB\PCB CASE\PCBCASE_V2\Cathode Bar
+! SUMMARY-   
+! SUMMARY-  Summary of Unigraphics Part Entities
+! SUMMARY-   
+! SUMMARY-  Entities Processed             Count
+! SUMMARY-  ------------------             -----
+! SUMMARY-  Solid/Sheet .................:     1
+! SUMMARY-                                 -----
+! SUMMARY-  Total                              1
+! STATUS-   Creating the UG part (Phase 3 of 3): 29-MAR-2025  9:40:29 PM
+! INFO-     Filing Part ..: C:\LocalDocs\Wheelchair-Powermeter\PCB\PCB CASE\PCBCASE_V2\Anode
+! SUMMARY-   
+! SUMMARY-  Summary of Unigraphics Part Entities
+! SUMMARY-   
+! SUMMARY-  Entities Processed             Count
+! SUMMARY-  ------------------             -----
+! SUMMARY-  Solid/Sheet .................:     1
+! SUMMARY-                                 -----
+! SUMMARY-  Total                              1
+! STATUS-   Creating the UG part (Phase 3 of 3): 29-MAR-2025  9:40:29 PM
+! INFO-     Filing Part ..: C:\LocalDocs\Wheelchair-Powermeter\PCB\PCB CASE\PCBCASE_V2\Cathode
+! SUMMARY-   
+! SUMMARY-  Summary of Unigraphics Part Entities
+! SUMMARY-   
+! SUMMARY-  Entities Processed             Count
+! SUMMARY-  ------------------             -----
+! SUMMARY-  Solid/Sheet .................:     1
+! SUMMARY-                                 -----
+! SUMMARY-  Total                              1
+! STATUS-   Creating the UG part (Phase 3 of 3): 29-MAR-2025  9:40:29 PM
+! INFO-     Filing Part ..: C:\LocalDocs\Wheelchair-Powermeter\PCB\PCB CASE\PCBCASE_V2\LED 0603 single color v1
+! SUMMARY-   
+! SUMMARY-  Summary of Unigraphics Part Entities
+! SUMMARY-   
+! SUMMARY-  Entities Processed             Count
+! SUMMARY-  ------------------             -----
+! SUMMARY-  Solid/Sheet .................:     5
+! SUMMARY-                                 -----
+! SUMMARY-  Total                              5
+! STATUS-   Creating the UG part (Phase 3 of 3): 29-MAR-2025  9:40:29 PM
+! INFO-     Filing Part ..: C:\LocalDocs\Wheelchair-Powermeter\PCB\PCB CASE\PCBCASE_V2\COMPOUND141153
+! SUMMARY-   
+! SUMMARY-  Summary of Unigraphics Part Entities
+! SUMMARY-   
+! SUMMARY-  Entities Processed             Count
+! SUMMARY-  ------------------             -----
+! SUMMARY-  Solid/Sheet .................:     6
+! SUMMARY-                                 -----
+! SUMMARY-  Total                              6
+! STATUS-   Creating the UG part (Phase 3 of 3): 29-MAR-2025  9:40:29 PM
+! INFO-     Filing Part ..: C:\LocalDocs\Wheelchair-Powermeter\PCB\PCB CASE\PCBCASE_V2\COMPOUND
+! SUMMARY-   
+! SUMMARY-  Summary of Unigraphics Part Entities
+! SUMMARY-   
+! SUMMARY-  Entities Processed             Count
+! SUMMARY-  ------------------             -----
+! SUMMARY-                                 -----
+! SUMMARY-  Total                              0
+! STATUS-   Creating the UG part (Phase 3 of 3): 29-MAR-2025  9:40:29 PM
+! INFO-     Filing Part ..: C:\LocalDocs\Wheelchair-Powermeter\PCB\PCB CASE\PCBCASE_V2\SOT23-5 v1
+! SUMMARY-   
+! SUMMARY-  Summary of Unigraphics Part Entities
+! SUMMARY-   
+! SUMMARY-  Entities Processed             Count
+! SUMMARY-  ------------------             -----
+! SUMMARY-  Solid/Sheet .................:     6
+! SUMMARY-                                 -----
+! SUMMARY-  Total                              6
+! STATUS-   Creating the UG part (Phase 3 of 3): 29-MAR-2025  9:40:29 PM
+! INFO-     Filing Part ..: C:\LocalDocs\Wheelchair-Powermeter\PCB\PCB CASE\PCBCASE_V2\ICM-20948-9axis-IMU v2
+! SUMMARY-   
+! SUMMARY-  Summary of Unigraphics Part Entities
+! SUMMARY-   
+! SUMMARY-  Entities Processed             Count
+! SUMMARY-  ------------------             -----
+! SUMMARY-  Solid/Sheet .................:    26
+! SUMMARY-                                 -----
+! SUMMARY-  Total                             26
+! STATUS-   Creating the UG part (Phase 3 of 3): 29-MAR-2025  9:40:29 PM
+! INFO-     Filing Part ..: C:\LocalDocs\Wheelchair-Powermeter\PCB\PCB CASE\PCBCASE_V2\Printed Circuit Board
+! SUMMARY-   
+! SUMMARY-  Summary of Unigraphics Part Entities
+! SUMMARY-   
+! SUMMARY-  Entities Processed             Count
+! SUMMARY-  ------------------             -----
+! SUMMARY-  Solid/Sheet .................:     1
+! SUMMARY-                                 -----
+! SUMMARY-  Total                              1
+! STATUS-   Creating the UG part (Phase 3 of 3): 29-MAR-2025  9:40:30 PM
+! INFO-     Filing Part ..: C:\LocalDocs\Wheelchair-Powermeter\PCB\PCB CASE\PCBCASE_V2\USB4085-GF-A_REVB
+! SUMMARY-   
+! SUMMARY-  Summary of Unigraphics Part Entities
+! SUMMARY-   
+! SUMMARY-  Entities Processed             Count
+! SUMMARY-  ------------------             -----
+! SUMMARY-  Solid/Sheet .................:    35
+! SUMMARY-                                 -----
+! SUMMARY-  Total                             35
+! STATUS-   Creating the UG part (Phase 3 of 3): 29-MAR-2025  9:40:30 PM
+! INFO-     Filing Part ..: C:\LocalDocs\Wheelchair-Powermeter\PCB\PCB CASE\PCBCASE_V2\Wheelchair Powermeter PCBV2 1.6.1
+! SUMMARY-   
+! SUMMARY-  Summary of Unigraphics Part Entities
+! SUMMARY-   
+! SUMMARY-  Entities Processed             Count
+! SUMMARY-  ------------------             -----
+! SUMMARY-  Solid/Sheet .................:   148
+! SUMMARY-                                 -----
+! SUMMARY-  Total                            148
+! STATUS-   Creating the UG part (Phase 3 of 3): 29-MAR-2025  9:40:31 PM
+! INFO-     Filing Part ..: C:\LocalDocs\Wheelchair-Powermeter\PCB\PCB CASE\PCBCASE_V2\1893 Altimeter MLP3115A2
+! SUMMARY-   
+! SUMMARY-  Summary of Unigraphics Part Entities
+! SUMMARY-   
+! SUMMARY-  Entities Processed             Count
+! SUMMARY-  ------------------             -----
+! SUMMARY-  Solid/Sheet .................:    13
+! SUMMARY-                                 -----
+! SUMMARY-  Total                             13
+! STATUS-   Creating the UG part (Phase 3 of 3): 29-MAR-2025  9:40:31 PM
+! INFO-     Filing Part ..: C:\LocalDocs\Wheelchair-Powermeter\PCB\PCB CASE\PCBCASE_V2\TestPoint_Loop_D3.80mm_Drill2.5mm
+! SUMMARY-   
+! SUMMARY-  Summary of Unigraphics Part Entities
+! SUMMARY-   
+! SUMMARY-  Entities Processed             Count
+! SUMMARY-  ------------------             -----
+! SUMMARY-  Solid/Sheet .................:     1
+! SUMMARY-                                 -----
+! SUMMARY-  Total                              1
+! STATUS-   Creating the UG part (Phase 3 of 3): 29-MAR-2025  9:40:31 PM
+! INFO-     Filing Part ..: C:\LocalDocs\Wheelchair-Powermeter\PCB\PCB CASE\PCBCASE_V2\hp03-pinn-P2
+! SUMMARY-   
+! SUMMARY-  Summary of Unigraphics Part Entities
+! SUMMARY-   
+! SUMMARY-  Entities Processed             Count
+! SUMMARY-  ------------------             -----
+! SUMMARY-  Solid/Sheet .................:     1
+! SUMMARY-                                 -----
+! SUMMARY-  Total                              1
+! STATUS-   Creating the UG part (Phase 3 of 3): 29-MAR-2025  9:40:31 PM
+! INFO-     Filing Part ..: C:\LocalDocs\Wheelchair-Powermeter\PCB\PCB CASE\PCBCASE_V2\hp03-button
+! SUMMARY-   
+! SUMMARY-  Summary of Unigraphics Part Entities
+! SUMMARY-   
+! SUMMARY-  Entities Processed             Count
+! SUMMARY-  ------------------             -----
+! SUMMARY-  Solid/Sheet .................:     1
+! SUMMARY-                                 -----
+! SUMMARY-  Total                              1
+! STATUS-   Creating the UG part (Phase 3 of 3): 29-MAR-2025  9:40:31 PM
+! INFO-     Filing Part ..: C:\LocalDocs\Wheelchair-Powermeter\PCB\PCB CASE\PCBCASE_V2\hp03-cap
+! SUMMARY-   
+! SUMMARY-  Summary of Unigraphics Part Entities
+! SUMMARY-   
+! SUMMARY-  Entities Processed             Count
+! SUMMARY-  ------------------             -----
+! SUMMARY-  Solid/Sheet .................:     1
+! SUMMARY-                                 -----
+! SUMMARY-  Total                              1
+! STATUS-   Creating the UG part (Phase 3 of 3): 29-MAR-2025  9:40:31 PM
+! INFO-     Filing Part ..: C:\LocalDocs\Wheelchair-Powermeter\PCB\PCB CASE\PCBCASE_V2\hp03-body
+! SUMMARY-   
+! SUMMARY-  Summary of Unigraphics Part Entities
+! SUMMARY-   
+! SUMMARY-  Entities Processed             Count
+! SUMMARY-  ------------------             -----
+! SUMMARY-  Solid/Sheet .................:     1
+! SUMMARY-                                 -----
+! SUMMARY-  Total                              1
+! STATUS-   Creating the UG part (Phase 3 of 3): 29-MAR-2025  9:40:31 PM
+! INFO-     Filing Part ..: C:\LocalDocs\Wheelchair-Powermeter\PCB\PCB CASE\PCBCASE_V2\SOD-323
+! SUMMARY-   
+! SUMMARY-  Summary of Unigraphics Part Entities
+! SUMMARY-   
+! SUMMARY-  Entities Processed             Count
+! SUMMARY-  ------------------             -----
+! SUMMARY-  Group .......................:     4
+! SUMMARY-                                 -----
+! SUMMARY-  Total                              4
+! STATUS-   Creating the UG part (Phase 3 of 3): 29-MAR-2025  9:40:32 PM
+! INFO-     Filing Part ..: C:\LocalDocs\Wheelchair-Powermeter\PCB\PCB CASE\PCBCASE_V2\SOD-323 v1
+! SUMMARY-   
+! SUMMARY-  Summary of Unigraphics Part Entities
+! SUMMARY-   
+! SUMMARY-  Entities Processed             Count
+! SUMMARY-  ------------------             -----
+! SUMMARY-  Group .......................:     1
+! SUMMARY-                                 -----
+! SUMMARY-  Total                              1
+! STATUS-   Creating the UG part (Phase 3 of 3): 29-MAR-2025  9:40:32 PM
+! INFO-     Filing Part ..: C:\LocalDocs\Wheelchair-Powermeter\PCB\PCB CASE\PCBCASE_V2\SOT23-6 v3
+! SUMMARY-   
+! SUMMARY-  Summary of Unigraphics Part Entities
+! SUMMARY-   
+! SUMMARY-  Entities Processed             Count
+! SUMMARY-  ------------------             -----
+! SUMMARY-  Group .......................:     2
+! SUMMARY-                                 -----
+! SUMMARY-  Total                              2
+! STATUS-   Creating the UG part (Phase 3 of 3): 29-MAR-2025  9:40:32 PM
+! INFO-     Filing Part ..: C:\LocalDocs\Wheelchair-Powermeter\PCB\PCB CASE\PCBCASE_V2\Adafruit ICM20948 STEMMA QT
+! SUMMARY-   
+! SUMMARY-  Summary of Unigraphics Part Entities
+! SUMMARY-   
+! SUMMARY-  Entities Processed             Count
+! SUMMARY-  ------------------             -----
+! SUMMARY-  Group .......................:    17
+! SUMMARY-                                 -----
+! SUMMARY-  Total                             17
+! STATUS-   Creating the UG part (Phase 3 of 3): 29-MAR-2025  9:40:34 PM
+! INFO-     Filing Part ..: C:\LocalDocs\Wheelchair-Powermeter\PCB\PCB CASE\PCBCASE_V2\5400 ESP32 Feather V2
+! SUMMARY-   
+! SUMMARY-  Summary of Unigraphics Part Entities
+! SUMMARY-   
+! SUMMARY-  Entities Processed             Count
+! SUMMARY-  ------------------             -----
+! SUMMARY-  Group .......................:     1
+! SUMMARY-                                 -----
+! SUMMARY-  Total                              1
+! STATUS-   Creating the UG part (Phase 3 of 3): 29-MAR-2025  9:40:36 PM
+! INFO-     Filing Part ..: C:\LocalDocs\Wheelchair-Powermeter\PCB\PCB CASE\PCBCASE_V2\HP0315AFKP2
+! SUMMARY-   
+! SUMMARY-  Summary of Unigraphics Part Entities
+! SUMMARY-   
+! SUMMARY-  Entities Processed             Count
+! SUMMARY-  ------------------             -----
+! SUMMARY-  Group .......................:     7
+! SUMMARY-                                 -----
+! SUMMARY-  Total                              7
+! STATUS-   Creating the UG part (Phase 3 of 3): 29-MAR-2025  9:40:36 PM
+! INFO-     Filing Part ..: C:\LocalDocs\Wheelchair-Powermeter\PCB\PCB CASE\PCBCASE_V2\Wheelchair Powermeter PCBV2.prt
+! SUMMARY-   
+! SUMMARY-  Summary of Unigraphics Part Entities
+! SUMMARY-   
+! SUMMARY-  Entities Processed             Count
+! SUMMARY-  ------------------             -----
+! SUMMARY-  Group .......................:    16
+! SUMMARY-                                 -----
+! SUMMARY-  Total                             16
+! INFO-      
+! INFO-     Total number of solids input for this translation       :       264
+! INFO-      
+! INFO-     Number of solids created without body validation faults :       264
+! INFO-      
+! INFO-     Number of solids created with body validation fault(s)  :         0
+! INFO-      
+! INFO-     Number of solids ending up as sheet bodies              :         0
+! INFO-      
+! INFO-     End of Translation: 29-MAR-2025  9:40:44 PM
+! INFO-      
+STEP to UG
+! INFO-     NX STEP AP203 - V2406.3002
+! INFO-      
+! INFO-     Start of Translation: 29-MAR-2025  10:08:48 PM
+! INFO-      
+! STATUS-   Converting Part: C:\LocalDocs\Wheelchair-Powermeter\PCB\Wheelchair Powermeter PCB\Wheelchair Powermeter PCBV2.step
+! SUMMARY-   
+! SUMMARY-    STEP Header Information
+! SUMMARY-   
+! SUMMARY-  Description      KiCad electronic assembly
+! SUMMARY-  Imp_Level        2;1
+! SUMMARY-  File_Name        Wheelchair Powermeter PCBV2.step
+! SUMMARY-  Date             2025-03-29T22:07:15
+! SUMMARY-  Author           Pcbnew
+! SUMMARY-  Organization     Kicad
+! SUMMARY-  Pre_Version      Open CASCADE STEP processor 7.8
+! SUMMARY-  Orig_System      KiCad to STEP converter
+! SUMMARY-  Authorization    Unknown
+! SUMMARY-  Schema_ID        automotive_design
+! SUMMARY-   
+! SUMMARY-    Summary of STEP Entities
+! SUMMARY-   
+! SUMMARY-  Entity Type                                                   Count
+! SUMMARY-  -----------                                                   ------
+! SUMMARY-  advanced_brep_shape_representation .........................:     15
+! SUMMARY-  advanced_face ..............................................:   5488
+! SUMMARY-  application_context ........................................:      1
+! SUMMARY-  axis1_placement ............................................:      4
+! SUMMARY-  axis2_placement_3d .........................................:   7783
+! SUMMARY-  b_spline_curve_with_knots ..................................:    250
+! SUMMARY-  b_spline_curve_with_knots_and_rational_b_spline_curve ......:     32
+! SUMMARY-  b_spline_surface_with_knots ................................:     88
+! SUMMARY-  b_spline_surface_with_knots_and_rational_b_spline_surface ..:     32
+! SUMMARY-  cartesian_point ............................................:  34444
+! SUMMARY-  circle .....................................................:   2307
+! SUMMARY-  closed_shell ...............................................:    264
+! SUMMARY-  conical_surface ............................................:     17
+! SUMMARY-  context_dependent_shape_representation .....................:     48
+! SUMMARY-  cylindrical_surface ........................................:   1079
+! SUMMARY-  direction ..................................................:  26821
+! SUMMARY-  edge_curve .................................................:  13899
+! SUMMARY-  edge_loop ..................................................:   6275
+! SUMMARY-  ellipse ....................................................:     63
+! SUMMARY-  face_bound .................................................:   6275
+! SUMMARY-  geometric_representation_context_and_global_uncertainty_a ..:     32
+! SUMMARY-  item_defined_transformation ................................:     48
+! SUMMARY-  length_unit_and_si_unit ....................................:     32
+! SUMMARY-  line .......................................................:  11251
+! SUMMARY-  manifold_solid_brep ........................................:    264
+! SUMMARY-  next_assembly_usage_occurrence .............................:     48
+! SUMMARY-  open_shell .................................................:      2
+! SUMMARY-  oriented_edge ..............................................:  27796
+! SUMMARY-  plane ......................................................:   4159
+! SUMMARY-  plane_angle_unit_and_si_unit ...............................:     32
+! SUMMARY-  product ....................................................:     32
+! SUMMARY-  product_context ............................................:     32
+! SUMMARY-  product_definition .........................................:     32
+! SUMMARY-  product_definition_context .................................:     32
+! SUMMARY-  product_definition_formation ...............................:     32
+! SUMMARY-  product_definition_shape ...................................:     80
+! SUMMARY-  product_related_product_category ...........................:     32
+! SUMMARY-  representation_relationship_with_transformation_and_shape ..:     48
+! SUMMARY-  shape_representation .......................................:     17
+! SUMMARY-  shell_based_surface_model ..................................:      2
+! SUMMARY-  si_unit_and_solid_angle_unit ...............................:     32
+! SUMMARY-  spherical_surface ..........................................:     34
+! SUMMARY-  surface_of_revolution ......................................:      4
+! SUMMARY-  toroidal_surface ...........................................:     75
+! SUMMARY-  uncertainty_measure_with_unit ..............................:     32
+! SUMMARY-  vector .....................................................:  11251
+! SUMMARY-  vertex_point ...............................................:   9074
+! SUMMARY-                                                               -------
+! SUMMARY-  Total                                                         169690
+! STATUS-    
+! STATUS-   Converting to Output Form (Phase 2 of 3): 29-MAR-2025 10:08:48 PM
+! STATUS-    
+! STATUS-    
+! STATUS-   Generating UG geometry and placing them in parts
+! STATUS-    
+! STATUS-   Creating the UG part (Phase 3 of 3): 29-MAR-2025  10:08:54 PM
+! INFO-     Filing Part ..: C:\LocalDocs\Wheelchair-Powermeter\PCB\PCB CASE\PCBCASE_V2\Wheelchair Powermeter PCB_PCB
+! SUMMARY-   
+! SUMMARY-  Summary of Unigraphics Part Entities
+! SUMMARY-   
+! SUMMARY-  Entities Processed             Count
+! SUMMARY-  ------------------             -----
+! SUMMARY-  Solid/Sheet .................:     1
+! SUMMARY-                                 -----
+! SUMMARY-  Total                              1
+! STATUS-   Creating the UG part (Phase 3 of 3): 29-MAR-2025  10:08:55 PM
+! INFO-     Filing Part ..: C:\LocalDocs\Wheelchair-Powermeter\PCB\PCB CASE\PCBCASE_V2\R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal
+! SUMMARY-   
+! SUMMARY-  Summary of Unigraphics Part Entities
+! SUMMARY-   
+! SUMMARY-  Entities Processed             Count
+! SUMMARY-  ------------------             -----
+! SUMMARY-  Solid/Sheet .................:     1
+! SUMMARY-                                 -----
+! SUMMARY-  Total                              1
+! STATUS-   Creating the UG part (Phase 3 of 3): 29-MAR-2025  10:08:55 PM
+! INFO-     Filing Part ..: C:\LocalDocs\Wheelchair-Powermeter\PCB\PCB CASE\PCBCASE_V2\qwicc v1
+! SUMMARY-   
+! SUMMARY-  Summary of Unigraphics Part Entities
+! SUMMARY-   
+! SUMMARY-  Entities Processed             Count
+! SUMMARY-  ------------------             -----
+! SUMMARY-  Solid/Sheet .................:     7
+! SUMMARY-                                 -----
+! SUMMARY-  Total                              7
+! STATUS-   Creating the UG part (Phase 3 of 3): 29-MAR-2025  10:08:55 PM
+! INFO-     Filing Part ..: C:\LocalDocs\Wheelchair-Powermeter\PCB\PCB CASE\PCBCASE_V2\YC164_RESPACK v1
+! SUMMARY-   
+! SUMMARY-  Summary of Unigraphics Part Entities
+! SUMMARY-   
+! SUMMARY-  Entities Processed             Count
+! SUMMARY-  ------------------             -----
+! SUMMARY-  Solid/Sheet .................:     1
+! SUMMARY-                                 -----
+! SUMMARY-  Total                              1
+! STATUS-   Creating the UG part (Phase 3 of 3): 29-MAR-2025  10:08:55 PM
+! INFO-     Filing Part ..: C:\LocalDocs\Wheelchair-Powermeter\PCB\PCB CASE\PCBCASE_V2\RESC-0603 v1
+! SUMMARY-   
+! SUMMARY-  Summary of Unigraphics Part Entities
+! SUMMARY-   
+! SUMMARY-  Entities Processed             Count
+! SUMMARY-  ------------------             -----
+! SUMMARY-  Solid/Sheet .................:     3
+! SUMMARY-                                 -----
+! SUMMARY-  Total                              3
+! STATUS-   Creating the UG part (Phase 3 of 3): 29-MAR-2025  10:08:55 PM
+! INFO-     Filing Part ..: C:\LocalDocs\Wheelchair-Powermeter\PCB\PCB CASE\PCBCASE_V2\CAPC-0805-T0.95-BN v1
+! SUMMARY-   
+! SUMMARY-  Summary of Unigraphics Part Entities
+! SUMMARY-   
+! SUMMARY-  Entities Processed             Count
+! SUMMARY-  ------------------             -----
+! SUMMARY-  Solid/Sheet .................:     1
+! SUMMARY-                                 -----
+! SUMMARY-  Total                              1
+! STATUS-   Creating the UG part (Phase 3 of 3): 29-MAR-2025  10:08:55 PM
+! INFO-     Filing Part ..: C:\LocalDocs\Wheelchair-Powermeter\PCB\PCB CASE\PCBCASE_V2\CAPC-0603-T0.9-BN v1
+! SUMMARY-   
+! SUMMARY-  Summary of Unigraphics Part Entities
+! SUMMARY-   
+! SUMMARY-  Entities Processed             Count
+! SUMMARY-  ------------------             -----
+! SUMMARY-  Solid/Sheet .................:     1
+! SUMMARY-                                 -----
+! SUMMARY-  Total                              1
+! STATUS-   Creating the UG part (Phase 3 of 3): 29-MAR-2025  10:08:55 PM
+! INFO-     Filing Part ..: C:\LocalDocs\Wheelchair-Powermeter\PCB\PCB CASE\PCBCASE_V2\Body
+! SUMMARY-   
+! SUMMARY-  Summary of Unigraphics Part Entities
+! SUMMARY-   
+! SUMMARY-  Entities Processed             Count
+! SUMMARY-  ------------------             -----
+! SUMMARY-  Solid/Sheet .................:     1
+! SUMMARY-                                 -----
+! SUMMARY-  Total                              1
+! STATUS-   Creating the UG part (Phase 3 of 3): 29-MAR-2025  10:08:55 PM
+! INFO-     Filing Part ..: C:\LocalDocs\Wheelchair-Powermeter\PCB\PCB CASE\PCBCASE_V2\Cathode Bar
+! SUMMARY-   
+! SUMMARY-  Summary of Unigraphics Part Entities
+! SUMMARY-   
+! SUMMARY-  Entities Processed             Count
+! SUMMARY-  ------------------             -----
+! SUMMARY-  Solid/Sheet .................:     1
+! SUMMARY-                                 -----
+! SUMMARY-  Total                              1
+! STATUS-   Creating the UG part (Phase 3 of 3): 29-MAR-2025  10:08:55 PM
+! INFO-     Filing Part ..: C:\LocalDocs\Wheelchair-Powermeter\PCB\PCB CASE\PCBCASE_V2\Anode
+! SUMMARY-   
+! SUMMARY-  Summary of Unigraphics Part Entities
+! SUMMARY-   
+! SUMMARY-  Entities Processed             Count
+! SUMMARY-  ------------------             -----
+! SUMMARY-  Solid/Sheet .................:     1
+! SUMMARY-                                 -----
+! SUMMARY-  Total                              1
+! STATUS-   Creating the UG part (Phase 3 of 3): 29-MAR-2025  10:08:55 PM
+! INFO-     Filing Part ..: C:\LocalDocs\Wheelchair-Powermeter\PCB\PCB CASE\PCBCASE_V2\Cathode
+! SUMMARY-   
+! SUMMARY-  Summary of Unigraphics Part Entities
+! SUMMARY-   
+! SUMMARY-  Entities Processed             Count
+! SUMMARY-  ------------------             -----
+! SUMMARY-  Solid/Sheet .................:     1
+! SUMMARY-                                 -----
+! SUMMARY-  Total                              1
+! STATUS-   Creating the UG part (Phase 3 of 3): 29-MAR-2025  10:08:55 PM
+! INFO-     Filing Part ..: C:\LocalDocs\Wheelchair-Powermeter\PCB\PCB CASE\PCBCASE_V2\LED 0603 single color v1
+! SUMMARY-   
+! SUMMARY-  Summary of Unigraphics Part Entities
+! SUMMARY-   
+! SUMMARY-  Entities Processed             Count
+! SUMMARY-  ------------------             -----
+! SUMMARY-  Solid/Sheet .................:     5
+! SUMMARY-                                 -----
+! SUMMARY-  Total                              5
+! STATUS-   Creating the UG part (Phase 3 of 3): 29-MAR-2025  10:08:56 PM
+! INFO-     Filing Part ..: C:\LocalDocs\Wheelchair-Powermeter\PCB\PCB CASE\PCBCASE_V2\COMPOUND141153
+! SUMMARY-   
+! SUMMARY-  Summary of Unigraphics Part Entities
+! SUMMARY-   
+! SUMMARY-  Entities Processed             Count
+! SUMMARY-  ------------------             -----
+! SUMMARY-  Solid/Sheet .................:     6
+! SUMMARY-                                 -----
+! SUMMARY-  Total                              6
+! STATUS-   Creating the UG part (Phase 3 of 3): 29-MAR-2025  10:08:56 PM
+! INFO-     Filing Part ..: C:\LocalDocs\Wheelchair-Powermeter\PCB\PCB CASE\PCBCASE_V2\COMPOUND
+! SUMMARY-   
+! SUMMARY-  Summary of Unigraphics Part Entities
+! SUMMARY-   
+! SUMMARY-  Entities Processed             Count
+! SUMMARY-  ------------------             -----
+! SUMMARY-                                 -----
+! SUMMARY-  Total                              0
+! STATUS-   Creating the UG part (Phase 3 of 3): 29-MAR-2025  10:08:56 PM
+! INFO-     Filing Part ..: C:\LocalDocs\Wheelchair-Powermeter\PCB\PCB CASE\PCBCASE_V2\SOT23-5 v1
+! SUMMARY-   
+! SUMMARY-  Summary of Unigraphics Part Entities
+! SUMMARY-   
+! SUMMARY-  Entities Processed             Count
+! SUMMARY-  ------------------             -----
+! SUMMARY-  Solid/Sheet .................:     6
+! SUMMARY-                                 -----
+! SUMMARY-  Total                              6
+! STATUS-   Creating the UG part (Phase 3 of 3): 29-MAR-2025  10:08:56 PM
+! INFO-     Filing Part ..: C:\LocalDocs\Wheelchair-Powermeter\PCB\PCB CASE\PCBCASE_V2\ICM-20948-9axis-IMU v2
+! SUMMARY-   
+! SUMMARY-  Summary of Unigraphics Part Entities
+! SUMMARY-   
+! SUMMARY-  Entities Processed             Count
+! SUMMARY-  ------------------             -----
+! SUMMARY-  Solid/Sheet .................:    26
+! SUMMARY-                                 -----
+! SUMMARY-  Total                             26
+! STATUS-   Creating the UG part (Phase 3 of 3): 29-MAR-2025  10:08:56 PM
+! INFO-     Filing Part ..: C:\LocalDocs\Wheelchair-Powermeter\PCB\PCB CASE\PCBCASE_V2\Printed Circuit Board
+! SUMMARY-   
+! SUMMARY-  Summary of Unigraphics Part Entities
+! SUMMARY-   
+! SUMMARY-  Entities Processed             Count
+! SUMMARY-  ------------------             -----
+! SUMMARY-  Solid/Sheet .................:     1
+! SUMMARY-                                 -----
+! SUMMARY-  Total                              1
+! STATUS-   Creating the UG part (Phase 3 of 3): 29-MAR-2025  10:08:56 PM
+! INFO-     Filing Part ..: C:\LocalDocs\Wheelchair-Powermeter\PCB\PCB CASE\PCBCASE_V2\USB4085-GF-A_REVB
+! SUMMARY-   
+! SUMMARY-  Summary of Unigraphics Part Entities
+! SUMMARY-   
+! SUMMARY-  Entities Processed             Count
+! SUMMARY-  ------------------             -----
+! SUMMARY-  Solid/Sheet .................:    35
+! SUMMARY-                                 -----
+! SUMMARY-  Total                             35
+! STATUS-   Creating the UG part (Phase 3 of 3): 29-MAR-2025  10:08:56 PM
+! INFO-     Filing Part ..: C:\LocalDocs\Wheelchair-Powermeter\PCB\PCB CASE\PCBCASE_V2\Wheelchair Powermeter PCBV2 1.6.1
+! SUMMARY-   
+! SUMMARY-  Summary of Unigraphics Part Entities
+! SUMMARY-   
+! SUMMARY-  Entities Processed             Count
+! SUMMARY-  ------------------             -----
+! SUMMARY-  Solid/Sheet .................:   148
+! SUMMARY-                                 -----
+! SUMMARY-  Total                            148
+! STATUS-   Creating the UG part (Phase 3 of 3): 29-MAR-2025  10:08:58 PM
+! INFO-     Filing Part ..: C:\LocalDocs\Wheelchair-Powermeter\PCB\PCB CASE\PCBCASE_V2\1893 Altimeter MLP3115A2
+! SUMMARY-   
+! SUMMARY-  Summary of Unigraphics Part Entities
+! SUMMARY-   
+! SUMMARY-  Entities Processed             Count
+! SUMMARY-  ------------------             -----
+! SUMMARY-  Solid/Sheet .................:    13
+! SUMMARY-                                 -----
+! SUMMARY-  Total                             13
+! STATUS-   Creating the UG part (Phase 3 of 3): 29-MAR-2025  10:08:58 PM
+! INFO-     Filing Part ..: C:\LocalDocs\Wheelchair-Powermeter\PCB\PCB CASE\PCBCASE_V2\TestPoint_Loop_D3.80mm_Drill2.5mm
+! SUMMARY-   
+! SUMMARY-  Summary of Unigraphics Part Entities
+! SUMMARY-   
+! SUMMARY-  Entities Processed             Count
+! SUMMARY-  ------------------             -----
+! SUMMARY-  Solid/Sheet .................:     1
+! SUMMARY-                                 -----
+! SUMMARY-  Total                              1
+! STATUS-   Creating the UG part (Phase 3 of 3): 29-MAR-2025  10:08:58 PM
+! INFO-     Filing Part ..: C:\LocalDocs\Wheelchair-Powermeter\PCB\PCB CASE\PCBCASE_V2\hp03-pinn-P2
+! SUMMARY-   
+! SUMMARY-  Summary of Unigraphics Part Entities
+! SUMMARY-   
+! SUMMARY-  Entities Processed             Count
+! SUMMARY-  ------------------             -----
+! SUMMARY-  Solid/Sheet .................:     1
+! SUMMARY-                                 -----
+! SUMMARY-  Total                              1
+! STATUS-   Creating the UG part (Phase 3 of 3): 29-MAR-2025  10:08:58 PM
+! INFO-     Filing Part ..: C:\LocalDocs\Wheelchair-Powermeter\PCB\PCB CASE\PCBCASE_V2\hp03-button
+! SUMMARY-   
+! SUMMARY-  Summary of Unigraphics Part Entities
+! SUMMARY-   
+! SUMMARY-  Entities Processed             Count
+! SUMMARY-  ------------------             -----
+! SUMMARY-  Solid/Sheet .................:     1
+! SUMMARY-                                 -----
+! SUMMARY-  Total                              1
+! STATUS-   Creating the UG part (Phase 3 of 3): 29-MAR-2025  10:08:58 PM
+! INFO-     Filing Part ..: C:\LocalDocs\Wheelchair-Powermeter\PCB\PCB CASE\PCBCASE_V2\hp03-cap
+! SUMMARY-   
+! SUMMARY-  Summary of Unigraphics Part Entities
+! SUMMARY-   
+! SUMMARY-  Entities Processed             Count
+! SUMMARY-  ------------------             -----
+! SUMMARY-  Solid/Sheet .................:     1
+! SUMMARY-                                 -----
+! SUMMARY-  Total                              1
+! STATUS-   Creating the UG part (Phase 3 of 3): 29-MAR-2025  10:08:58 PM
+! INFO-     Filing Part ..: C:\LocalDocs\Wheelchair-Powermeter\PCB\PCB CASE\PCBCASE_V2\hp03-body
+! SUMMARY-   
+! SUMMARY-  Summary of Unigraphics Part Entities
+! SUMMARY-   
+! SUMMARY-  Entities Processed             Count
+! SUMMARY-  ------------------             -----
+! SUMMARY-  Solid/Sheet .................:     1
+! SUMMARY-                                 -----
+! SUMMARY-  Total                              1
+! STATUS-   Creating the UG part (Phase 3 of 3): 29-MAR-2025  10:08:58 PM
+! INFO-     Filing Part ..: C:\LocalDocs\Wheelchair-Powermeter\PCB\PCB CASE\PCBCASE_V2\SOD-323
+! SUMMARY-   
+! SUMMARY-  Summary of Unigraphics Part Entities
+! SUMMARY-   
+! SUMMARY-  Entities Processed             Count
+! SUMMARY-  ------------------             -----
+! SUMMARY-  Group .......................:     4
+! SUMMARY-                                 -----
+! SUMMARY-  Total                              4
+! STATUS-   Creating the UG part (Phase 3 of 3): 29-MAR-2025  10:08:58 PM
+! INFO-     Filing Part ..: C:\LocalDocs\Wheelchair-Powermeter\PCB\PCB CASE\PCBCASE_V2\SOD-323 v1
+! SUMMARY-   
+! SUMMARY-  Summary of Unigraphics Part Entities
+! SUMMARY-   
+! SUMMARY-  Entities Processed             Count
+! SUMMARY-  ------------------             -----
+! SUMMARY-  Group .......................:     1
+! SUMMARY-                                 -----
+! SUMMARY-  Total                              1
+! STATUS-   Creating the UG part (Phase 3 of 3): 29-MAR-2025  10:08:58 PM
+! INFO-     Filing Part ..: C:\LocalDocs\Wheelchair-Powermeter\PCB\PCB CASE\PCBCASE_V2\SOT23-6 v3
+! SUMMARY-   
+! SUMMARY-  Summary of Unigraphics Part Entities
+! SUMMARY-   
+! SUMMARY-  Entities Processed             Count
+! SUMMARY-  ------------------             -----
+! SUMMARY-  Group .......................:     2
+! SUMMARY-                                 -----
+! SUMMARY-  Total                              2
+! STATUS-   Creating the UG part (Phase 3 of 3): 29-MAR-2025  10:08:58 PM
+! INFO-     Filing Part ..: C:\LocalDocs\Wheelchair-Powermeter\PCB\PCB CASE\PCBCASE_V2\Adafruit ICM20948 STEMMA QT
+! SUMMARY-   
+! SUMMARY-  Summary of Unigraphics Part Entities
+! SUMMARY-   
+! SUMMARY-  Entities Processed             Count
+! SUMMARY-  ------------------             -----
+! SUMMARY-  Group .......................:    17
+! SUMMARY-                                 -----
+! SUMMARY-  Total                             17
+! STATUS-   Creating the UG part (Phase 3 of 3): 29-MAR-2025  10:09:01 PM
+! INFO-     Filing Part ..: C:\LocalDocs\Wheelchair-Powermeter\PCB\PCB CASE\PCBCASE_V2\5400 ESP32 Feather V2
+! SUMMARY-   
+! SUMMARY-  Summary of Unigraphics Part Entities
+! SUMMARY-   
+! SUMMARY-  Entities Processed             Count
+! SUMMARY-  ------------------             -----
+! SUMMARY-  Group .......................:     1
+! SUMMARY-                                 -----
+! SUMMARY-  Total                              1
+! STATUS-   Creating the UG part (Phase 3 of 3): 29-MAR-2025  10:09:02 PM
+! INFO-     Filing Part ..: C:\LocalDocs\Wheelchair-Powermeter\PCB\PCB CASE\PCBCASE_V2\HP0315AFKP2
+! SUMMARY-   
+! SUMMARY-  Summary of Unigraphics Part Entities
+! SUMMARY-   
+! SUMMARY-  Entities Processed             Count
+! SUMMARY-  ------------------             -----
+! SUMMARY-  Group .......................:     7
+! SUMMARY-                                 -----
+! SUMMARY-  Total                              7
+! STATUS-   Creating the UG part (Phase 3 of 3): 29-MAR-2025  10:09:03 PM
+! INFO-     Filing Part ..: C:\LocalDocs\Wheelchair-Powermeter\PCB\PCB CASE\PCBCASE_V2\Wheelchair Powermeter PCBV2.prt
+! SUMMARY-   
+! SUMMARY-  Summary of Unigraphics Part Entities
+! SUMMARY-   
+! SUMMARY-  Entities Processed             Count
+! SUMMARY-  ------------------             -----
+! SUMMARY-  Group .......................:    16
+! SUMMARY-                                 -----
+! SUMMARY-  Total                             16
+! INFO-      
+! INFO-     Total number of solids input for this translation       :       264
+! INFO-      
+! INFO-     Number of solids created without body validation faults :       264
+! INFO-      
+! INFO-     Number of solids created with body validation fault(s)  :         0
+! INFO-      
+! INFO-     Number of solids ending up as sheet bodies              :         0
+! INFO-      
+! INFO-     End of Translation: 29-MAR-2025  10:09:10 PM
+! INFO-      
