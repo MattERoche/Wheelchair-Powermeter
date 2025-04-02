@@ -122,10 +122,7 @@ Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS, TFT_DC, TFT_RST);
 // --- Sensor Objects ---
 Adafruit_ICM20948 icm;
 Adafruit_MPL3115A2 mpl;
-const float MS4525DO_FULL_RANGE_PA = 13789.5f; // 2 PSI converted to Pascals
-
-bfs::Ms4525do ms4525do(&Wire, 0x28, MS4525DO_FULL_RANGE_PA, 0.0f);
-
+bfs::Ms4525do ms4525do(&Wire, 0x28, 1.0f, -1.0f);
 
 // --- NeoPixel Object ---
 Adafruit_NeoPixel pixel(NEOPIXEL_COUNT, NEOPIXEL_PIN, NEO_GRB + NEO_KHZ800);

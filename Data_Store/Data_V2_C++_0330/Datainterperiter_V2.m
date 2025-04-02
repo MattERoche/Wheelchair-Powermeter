@@ -39,7 +39,7 @@ fWheelRPS = (vChairX)./cirWheelRear;
 
 Delta_P_Raw = (Data.DeltaP);
 DP_PSI = ((Delta_P_Raw - 8192) ./ 16384) .* 15;
-Delta_P = Delta_P_Raw-Delta_P_Raw(1);
+Delta_P = -1.*(Delta_P_Raw-Delta_P_Raw(1));
 
 
 
@@ -58,7 +58,7 @@ systemZeroAngle = atan(XZeroed/ZZeroeed);
 %% Loop calculations
 for i = 2:length(time)
     modgChairX(i) = (gChairX(i) - XZeroed); 
-    modgChairZ(i) = gChairZ_Filtered(i) - ZZeroeed;
+    modgChairZ(i) = gChairZ(i) - ZZeroeed;
     timeZero(i)=time(i)-time(1);
 
     if modgChairZ(i) > 0
@@ -86,12 +86,12 @@ for i = 2:length(time)
     Force_Drag(i) = 0.5*DAirOut(i)*ACDA*(Windy(i)^2);   
     Force_Rolling(i) = 2*CRR*vChairX(i)*(mAthte/2)*9.81;
  
-    x(i) = sign(SquareCenter(i)); %Positive NEgative signing,
+    x(i) = sign(SquareCenter(i)); %Positive Negative signing,
     gLong(i) = x(i)*sqrt(abs(SquareCenter(i)));
     FTireRear(i) = (modgChairX(i)*mAthte)+Force_Drag(i)+Force_Rolling(i);
 
     TWheelRear(i) = FTireRear(i)*rWheelRear;
-    POWER(i) = fWheelRPS(i) * TWheelRear(i);
+    POWER(i) = (fWheelRPS(i)/2*pi()) * TWheelRear(i);
 
     vChairX_KMH(i) = vChairX(i)*3.6;
 
@@ -103,16 +103,22 @@ for i = 2:length(time)
    
 
 end
-Window2 = 100;
-A2 = 2;
 
+Window2 = 300;
+A2 = 1;
 B2 = (1/Window2)*ones(1,Window2);
-WindowPow = 100;
-APow = 2;
+
+WindowPow = 300;
+APow = 1;
 BPow = (1/WindowPow)*ones(1,WindowPow);
+
+WindowVel = 300;
+AVel = 1;
+BVel = (1/WindowPow)*ones(1,WindowPow);
 
 POWER_Filter = filter(BPow,APow,POWER);
 POWER_Filter_Meter = filter(B2,A2,powermeter);
+Vel_Filter = filter(BVel,AVel,vChairX);
 
 %% Plot
 
@@ -130,12 +136,10 @@ hold off;
 nexttile([1 4])
 plot(timeZero,Windy, 'LineWidth',2);
 hold on
-plot(timeZero, vChairX, 'LineWidth',2)
+plot(timeZero, Vel_Filter, 'LineWidth',2)
 xlabel('Time (s)');
 ylabel('Windy (m/s)');
-yyaxis right
-plot(timeZero , vChairX_KMH, 'LineWidth',2);
-legend('Wind Speed',['Vchair'],'Velocity Chair KMH')
+legend('Wind Speed','Vchair','Velocity Chair KMH')
 hold off
 
 nexttile([1 2])
