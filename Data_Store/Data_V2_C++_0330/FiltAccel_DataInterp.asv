@@ -1,0 +1,228 @@
+clear;
+close all force;
+
+%% User Constants
+file = uigetfile('*.csv', '*.xlsx');
+Data = readtable(file,"NumHeaderLines",0);
+
+mAthte = 89; %KiloGrams
+cirWheelRear = 2.127; % Meters
+cirWheelFront = 2.127; % Meters
+rWheelRear = 0.175 ;
+rWheelFront = 0.175;
+
+CRR = 0.00441;
+ACDA = 0.34;
+rPushRim = 0.5;
+
+
+
+%% Datalog data skim
+time = Data.Time;
+gChairX = Data.AccelX;
+gChairY = Data.AccelY;
+gChairZ = Data.AccelZ;
+
+dnChairx = Data.GyroX;
+dnChairY = Data.GyroY;
+dnChairZ = Data.GyroZ;
+
+TAirOut = Data.Temp+287;
+PAirOut = Data.Pressure*100;
+DAirOut = (PAirOut./(287.*TAirOut));
+
+vChairX = Data.Speed./3.6;
+fWheelRPS = (vChairX)./cirWheelRear;
+%cadence = Data.Cadence_rad_s_;
+
+Delta_P_Raw = (Data.DeltaP);
+DP_PSI = ((Delta_P_Raw - 8192) ./ 16384) .* 15;
+Delta_P = -1.*(Delta_P_Raw-Delta_P_Raw(1));
+
+
+
+powermeter = Data.Power;
+
+
+%% Smoothing Parameters
+Window = 300;
+A = 1;
+B = (1/Window)*ones(1,Window);
+
+
+%% Array setups and Zero Functions
+gChairX_Filtered = filter(B,A,gChairX)-2;
+gChairZ_Filtered = filter(B,A,gChairZ)-10;
+Pitot_DP_Filtered = -filter(B,A,Delta_P);
+XZeroed = gChairX_Filtered(1);
+ZZeroeed = gChairZ_Filtered(1); 
+
+
+systemZeroAngle = atan(XZeroed/ZZeroeed);
+
+Windy = (sqrt((2.*(Pitot_DP_Filtered))./(DAirOut))./2);
+
+
+Force_Drag = 0.5.*DAirOut.*ACDA.*(vChairX.^2);   
+Force_Rolling = 2.*CRR.*vChairX.*(mAthte./2).*9.81;
+for i = 1:length(Force_Rolling)
+
+    glong(i) = sqrt(gChairX_Filtered(i)^2 + gChairZ_Filtered(i)^2);
+    timeZero(i)=time(i)-time(1);
+    FTireRear(i) = (glong(i).*mAthte)+Force_Drag(i)+Force_Rolling(i);
+    TWheelRear(i) = FTireRear(i)*rWheelRear;
+    rad_s(i) = (fWheelRPS(i)*2*pi());
+    POWER(i) = (fWheelRPS(i)) * TWheelRear(i);
+    
+    XFilZero(i) = gChairX_Filtered(i) - 2;
+    k(i) = i;
+
+
+end
+
+Window2 = 300;
+A2 = 1;
+B2 = (1/Window2)*ones(1,Window2);
+
+WindowPow = 300;
+APow = 1;
+BPow = (1/WindowPow)*ones(1,WindowPow);
+
+WindowVel = 300;
+AVel = 1;
+BVel = (1/WindowPow)*ones(1,WindowPow);
+POWER_Filter = filter(BPow,APow,POWER);
+POWER_Filter_Meter = filter(B2,A2,powermeter);
+
+for i = 1:length(POWER_Filter_Meter)
+    PowerRefDelta(i) = abs(POWER(i)-powermeter(i));
+end
+
+for i = 3947 : 4506
+    decell(i) = (vChairX(i+1)- vChairX(i))/(time(i+1)-time(i));
+    forceDecell(i) = decell(i) *mAthte;
+    Forceroll(i) = forceDecell(i) - Force_Drag(i);
+    CRR_RollDown(i) = Forceroll(i)/(2*vChairX(i)*(mAthte/2)*9.81);
+end
+CRR_RollDown = nonzeros(CRR_RollDown);
+MeanCRR = mean(CRR_RollDown);
+
+% decell = (vChairX(4506)- vChairX(3947))/(time(4506)-time(3947));
+% forceDecell = decell*mAthte;
+% Force_Drag_Av = vChairX;
+% forceroll = forceDecell - Force_Drag;
+% 
+% Force_Rolling = 2.*CRR.*vChairX.*(mAthte./2).*9.81;
+
+
+figure Name '1' 
+plot(timeZero, POWER, 'LineWidth', 2);
+xlabel('Time (s)');
+ylabel('Power (Torque Basis) (W)');
+title('Power IMU vs Power Ref')
+grid on;
+hold on;
+plot(timeZero, POWER_Filter_Meter , 'LineWidth', 2)
+
+legend('Power','Bike Powermeter','Power Error to referance',Location='northwest')
+hold off;
+saveas(1,'PowerVsPower','png')
+
+figure Name '2' 
+plot(timeZero, gChairX_Filtered, 'LineWidth',2)
+hold on 
+grid on
+plot(timeZero, gChairZ_Filtered, 'LineWidth',2)
+xlabel('Time (s)');
+ylabel('Acceleration (m/(s^2))')
+title('Smoothed Accelerometer Trace')
+legend('Acceleration X','Acceleration Z',Location='northwest')
+saveas(2,'Smoothed Accelerometer Trace','png')
+hold off
+
+figure Name '3' 
+plot(timeZero, vChairX, 'LineWidth',2)
+hold on 
+grid on
+xlabel('Time (s)');
+ylabel('Velocity (m/s)');
+title('BLE Velocity Sensor')
+legend('Vehicle Velocity X',Location='northwest')
+saveas(3,'BLE Velocity Sensor','png')
+hold off
+
+figure Name '4' 
+plot(timeZero, powermeter, 'LineWidth',2)
+hold on 
+grid on
+xlabel('Time (s)');
+ylabel('Power (W)');
+title('BLE Power Ref')
+legend('Bluetooth Powermeter',Location='northwest')
+saveas(4,'BLE Power Ref','png')
+hold off
+
+figure Name '5' 
+plot(timeZero, Force_Drag, 'LineWidth',2)
+hold on 
+grid on
+plot(timeZero, Force_Rolling, 'LineWidth',2)
+xlabel('Time (s)');
+ylabel('Force (N)');
+title('Resistive Forces')
+legend('Drag Force', 'Rolling Resistance Force',Location='northwest')
+saveas(5,'Resistive Forces','png')
+hold off
+
+
+
+figure Name '6' 
+plot(timeZero, Windy, 'LineWidth',2)
+hold on 
+grid on
+plot(timeZero, vChairX, 'LineWidth',2)
+xlabel('Time (s)');
+ylabel('Velocity (m/s)');
+title('Windspeed vs Vehicle Velocity')
+legend('Windspeed','Vehicle Velocity',Location='northwest')
+saveas(6,'Windspeed vs Vehicle Velocity','png')
+hold off
+
+figure Name '7' 
+plot(timeZero, gChairX, 'LineWidth',2)
+hold on 
+grid on
+plot(timeZero, gChairZ, 'LineWidth',2)
+xlabel('Time (s)');
+ylabel('Acceleration (m/s^2)');
+title('Unfiltered Acceleration')
+legend('Acceleration X','Acceleration Z',Location='northwest')
+saveas(7,'Unfiltered Accel','png')
+hold off
+
+figure Name '8' 
+plot(timeZero, XFilZero, 'LineWidth',2)
+hold on 
+grid on
+xlabel('Time (s)');
+ylabel('Acceleration (m/s^2)');
+title('Unfiltered Acceleration')
+yyaxis right
+plot(timeZero, vChairX, 'LineWidth',2)
+ylabel('Vehicle Speed (m/s)')
+legend('Acceleration X','Chair Velocity',Location='northeast')
+saveas(8,'Accel Vs speed delay','png')
+hold off
+
+
+figure Name '9' 
+plot(k, vChairX, 'LineWidth',2)
+hold on 
+grid on
+xlabel('Time (s)');
+ylabel('Acceleration (m/s^2)');
+title('Unfiltered Acceleration')
+ylabel('Vehicle Speed (m/s)')
+legend('Acceleration X',Location='northeast')
+saveas(9,'Accel Vs speed delay','png')
+hold off

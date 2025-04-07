@@ -36,7 +36,7 @@ DAirOut = (PAirOut./(287.*TAirOut));
 
 vChairX = Data.Speed./3.6;
 fWheelRPS = (vChairX)./cirWheelRear;
-%cadence = Data.Cadence_rad_s_;
+cadence = Data.Cadence_rad_s_;
 
 Delta_P_Raw = (Data.DeltaP);
 DP_PSI = ((Delta_P_Raw - 8192) ./ 16384) .* 15;
@@ -75,9 +75,8 @@ for i = 2:length(time)
     FTireRear(i) = (modgChairX(i)*mAthte)+Force_Drag(i)+Force_Rolling(i);
 
     TWheelRear(i) = FTireRear(i)*rWheelRear;
-    rad_s(i) = (fWheelRPS(i)*2*pi());
-    POWER(i) = (fWheelRPS(i)*2*pi()) * TWheelRear(i);
-    %POWER2(i) = (cadence(i)) * TWheelRear(i);
+    POWER(i) = (fWheelRPS(i)/2*pi()) * TWheelRear(i);
+    POWER2(i) = (cadence(i)) * TWheelRear(i);
 
 
     vChairX_KMH(i) = vChairX(i)*3.6;
@@ -120,7 +119,6 @@ ylabel('Power (Torque Basis) (W)');
 grid on;
 hold on;
 plot(timeZero, POWER_Filter_Meter , 'LineWidth', 2)
-plot(timeZero, POWER2, 'LineWidth', 2);
 legend('Power','Bike Powermeter')
 hold off;
 

@@ -39,11 +39,9 @@ fWheelRPS = Data.RPS;
 Delta_P = Data.Delta_Pressure;
 Wind_Speed_ms = Data.wind_speed_ms;
 Pitot_DP = Data.Delta_Pressure;
-Pitot_DP_offset = Pitot_DP - 530  ;
-Pitot_DP_offset_filter = filter(B,A,Pitot_DP_offset);
+
 powermeter = Data.power;
 powermeter_3s = filter(B,A,powermeter);
-
 
 %% Array setups and Zero Functions
 gChairX_Filtered = filter(B,A,gChairX);
@@ -142,11 +140,6 @@ POWER_Filter = filter(B2,A2,POWER);
 InfluanceNonZero = nonzeros(percentageInfluance);
 meanEffectForce = mean(InfluanceNonZero)
 
-maxtotal = max(TotalResForce)
-maxPercent = max(percentageInfluance)
-maxdrag = max(Force_Drag)
-maxrr = max(Force_Rolling)
-
 %% Plot
 figure
 tiledlayout(4,4)
@@ -243,15 +236,4 @@ ylabel('Percentage Influance');
 title('Influance of Drag on total resistive forces')
 legend('Percenatage influance of drag',Location='northwest')
 saveas(4,'Drag% PY','png')
-hold off
-
-figure Name 'Pitot' 
-plot(timeZero, Pitot_DP_offset_filter, 'LineWidth',2)
-hold on 
-grid on
-xlabel('Time (s)');
-ylabel('Pressure (Pa)');
-title('Delta Pressure Measured')
-legend('Raw Offset delta Pressure values',Location='northwest')
-saveas(Pitot,'PitotDP','png')
 hold off

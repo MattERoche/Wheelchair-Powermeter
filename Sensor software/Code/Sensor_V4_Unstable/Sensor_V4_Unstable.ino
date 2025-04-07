@@ -43,7 +43,7 @@
 
 // --- Logging Settings ---
 const char* LOG_FILENAME = "/log.csv";
-const unsigned long LOG_INTERVAL_MS = 100;
+const unsigned long LOG_INTERVAL_MS = 10;
 const unsigned long FLUSH_INTERVAL_MS = 1000;
 const size_t MAX_LOG_BUFFER_SIZE = 1024;
 const int CSV_PRECISION_ACCEL = 2;
@@ -54,7 +54,8 @@ const int CSV_PRECISION_AIRSPEED = 1; // Precision for Raw DeltaP (MS4525)
 const int CSV_PRECISION_SPEED_KPH = 2; // Precision for Wheel Speed
 const int CSV_PRECISION_POWER = 0;
 const int CSV_PRECISION_WINDSPEED = 2; // Precision for Calculated Airspeed
-const int CSV_BUFFER_LINE_LENGTH = 200;
+const int CSV_BUFFER_LINE_LENGTH = 220;
+const int CSV_PRECISION_CADENCE = 2;   // Precision for Calculated Cadence (rad/s)
 
 // --- BLE Settings ---
 static BLEUUID CSC_SERVICE_UUID((uint16_t)0x1816);
@@ -108,6 +109,12 @@ sensors_event_t accel, gyro, temp_imu; // Structures for IMU data (Raw values)
 uint32_t lastWheelRevs = 0;
 uint16_t lastWheelEventTime = 0;
 unsigned long lastNonZeroRevTime = 0;
+
+uint16_t lastCrankRevs = 0;
+uint16_t lastCrankEventTime = 0; // 1/1024s
+unsigned long lastNonZeroCrankTime = 0; // ms
+float currentCadenceRadPerSec = 0.0f; // Calculated cadence in rad/s
+const unsigned long BLE_CADENCE_TIMEOUT_MS = 3000; // Timeout for cadence -> 0
 
 // --- Sensor Readiness ---
 bool icmReady = false;
@@ -346,7 +353,7 @@ void loop() {
            updateLEDStatus(STATUS_ERROR, true);
         } else {
            // Changed Header: DeltaP (raw), Airspeed (calculated)
-           file.println("Time,AccelX,AccelY,AccelZ,GyroX,GyroY,GyroZ,Pressure,Temp,DeltaP,AirspeedTemp,Speed,Power,Airspeed");
+           file.println("Time,AccelX,AccelY,AccelZ,GyroX,GyroY,GyroZ,Pressure,Temp,DeltaP,AirspeedTemp,Speed,Power,Airspeed,Cadence(rad/s)"); 
            file.close();
            Serial.println("✅ Recording starting.");
 
@@ -398,7 +405,7 @@ void loop() {
 
     char csvLine[CSV_BUFFER_LINE_LENGTH];
     snprintf(csvLine, sizeof(csvLine),
-             "%.3f,%.*f,%.*f,%.*f,%.*f,%.*f,%.*f,%.*f,%.*f,%.*f,%.*f,%.*f,%.*f,%.*f",
+             "%.3f,%.*f,%.*f,%.*f,%.*f,%.*f,%.*f,%.*f,%.*f,%.*f,%.*f,%.*f,%.*f,%.*f,%.f",
              nowMillis / 1000.0f,
              CSV_PRECISION_ACCEL, accel.acceleration.x, // Log raw Accel X
              CSV_PRECISION_ACCEL, accel.acceleration.y, // Log raw Accel Y
@@ -412,7 +419,8 @@ void loop() {
              CSV_PRECISION_TEMP, lastAirTemp,
              CSV_PRECISION_SPEED_KPH, currentSpeedKph,  // Wheel speed from BLE
              CSV_PRECISION_POWER, currentPower,         // Power from BLE
-             CSV_PRECISION_WINDSPEED, currentAirspeedKph // Calculated airspeed
+             CSV_PRECISION_WINDSPEED, currentAirspeedKph, // Calculated airspeed
+             CSV_PRECISION_CADENCE, currentCadenceRadPerSec //
             );
 
     logBuffer += csvLine;
@@ -667,10 +675,53 @@ float airspeedPaToKph(float pressure_pa) {
 }
 
 void powerNotifyCallback(BLERemoteCharacteristic* pChar, uint8_t* pData, size_t length, bool isNotify) {
-  // No Serial printing
-  if (length < 4) return;
-  int16_t watts = pData[2] | (pData[3] << 8);
-  currentPower = (float)watts;
+    if (length < 4) return; // Minimum length for Flags(2) + Power(2)
+    uint16_t flags = pData[0] | (pData[1] << 8);
+    int16_t watts = pData[2] | (pData[3] << 8);
+    currentPower = (float)watts;
+    bool crankDataPresent = (flags & 0x0200);
+
+    if (crankDataPresent) {
+        if (length < 8) {
+            #ifdef ENABLE_VERBOSE_DEBUG
+            Serial.println("VERBOSE: Power callback - crank flag set but length too short.");
+            #endif
+            return; // Not enough data for cadence
+        }
+        uint16_t cumulativeCrankRevs = pData[4] | (pData[5] << 8);
+        uint16_t crankEventTime = pData[6] | (pData[7] << 8);
+
+        uint32_t timeDelta_1024 = (crankEventTime >= lastCrankEventTime) ?
+                                  (crankEventTime - lastCrankEventTime) :
+                                  ((0xFFFF - lastCrankEventTime) + crankEventTime + 1);
+        uint16_t crankRevDelta = (cumulativeCrankRevs >= lastCrankRevs) ?
+                                 (cumulativeCrankRevs - lastCrankRevs) :
+                                 ((0xFFFF - lastCrankRevs) + cumulativeCrankRevs + 1);
+
+        if (crankRevDelta > 0 && timeDelta_1024 > 0) {
+            float timeDeltaSec = (float)timeDelta_1024 / 1024.0f;
+            // Cadence (rad/s) = (Revolutions / TimeDeltaSeconds) * (2*PI Radians / Revolution)
+            currentCadenceRadPerSec = ((float)crankRevDelta / timeDeltaSec) * (2.0f * PI);
+            lastNonZeroCrankTime = millis(); // Update time of last movement
+        } else if (cumulativeCrankRevs == lastCrankRevs) {
+            if (millis() - lastNonZeroCrankTime > BLE_CADENCE_TIMEOUT_MS) {
+                currentCadenceRadPerSec = 0.0f; // Set cadence to zero after timeout
+            }
+        } else {
+             #ifdef ENABLE_VERBOSE_DEBUG
+             Serial.println("VERBOSE: Cadence calc - unexpected delta state.");
+             #endif
+        }
+
+        // Update state for next calculation
+        lastCrankRevs = cumulativeCrankRevs;
+        lastCrankEventTime = crankEventTime;
+
+    } else {
+        if (millis() - lastNonZeroCrankTime > BLE_CADENCE_TIMEOUT_MS) {
+            currentCadenceRadPerSec = 0.0f;
+        }
+    }
 }
 
 void dumpCSVOverSerial() {
