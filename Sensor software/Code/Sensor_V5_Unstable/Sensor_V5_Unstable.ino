@@ -12,7 +12,7 @@
 #include <SPI.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_ST7735.h>
-#include <math.h> // Include for isnan, sqrtf
+#include <math.h>
 
 // =============================================================
 // ==                     Configuration                     ==
@@ -37,7 +37,7 @@
 
 // --- Logging Settings ---
 const char* LOG_FILENAME = "/log.csv";
-const unsigned long LOG_INTERVAL_MS = 10; // Log data every 10ms (100 Hz)
+const unsigned long LOG_INTERVAL_MS = 10;
 const unsigned long FLUSH_INTERVAL_MS = 1000;
 const size_t MAX_LOG_BUFFER_SIZE = 1024;
 const int CSV_PRECISION_ACCEL = 2;
@@ -49,7 +49,7 @@ const int CSV_PRECISION_SPEED_KPH = 2;
 const int CSV_PRECISION_POWER = 0;
 const int CSV_PRECISION_WINDSPEED = 2;
 const int CSV_BUFFER_LINE_LENGTH = 220;
-const int CSV_PRECISION_CADENCE = 0; // Cadence often reported/displayed as integer RPM
+const int CSV_PRECISION_CADENCE = 0;
 
 // --- Sensor Settings ---
 #define ICM_ACCEL_RATE_DIV 10
@@ -58,17 +58,17 @@ const int CSV_PRECISION_CADENCE = 0; // Cadence often reported/displayed as inte
 #define AIR_DENSITY 1.22f
 
 // --- BLE Settings ---
-static BLEUUID CSC_SERVICE_UUID((uint16_t)0x1816); // Used by Speed and Cadence
-static BLEUUID CSC_MEASUREMENT_CHAR_UUID((uint16_t)0x2A5B); // Used by Speed and Cadence
+static BLEUUID CSC_SERVICE_UUID((uint16_t)0x1816);
+static BLEUUID CSC_MEASUREMENT_CHAR_UUID((uint16_t)0x2A5B);
 static BLEUUID CYCLING_POWER_SERVICE_UUID((uint16_t)0x1818);
 static BLEUUID CYCLING_POWER_MEASUREMENT_CHAR_UUID((uint16_t)0x2A63);
 const unsigned long BLE_SCAN_INTERVAL_MS = 100;
 const unsigned long BLE_SCAN_WINDOW_MS = 99;
-const unsigned long BLE_SCAN_DURATION_S = 5; // Slightly longer scan maybe needed
+const unsigned long BLE_SCAN_DURATION_S = 5;
 const unsigned long BLE_CONNECT_RETRY_INTERVAL_MS = 5000;
-const float WHEEL_CIRCUMFERENCE_METERS = 2.105f;
+const float WHEEL_CIRCUMFERENCE_METERS = 0.220f;
 const unsigned long BLE_SPEED_TIMEOUT_MS = 3000;
-const unsigned long BLE_CADENCE_TIMEOUT_MS = 3000; // Timeout for dedicated cadence sensor
+const unsigned long BLE_CADENCE_TIMEOUT_MS = 3000;
 
 // --- Display Settings ---
 const unsigned long DISPLAY_UPDATE_INTERVAL_MS = 500;
@@ -85,21 +85,21 @@ bool recordingStarted = false;
 
 // --- BLE State ---
 BLEScan* pBLEScan = nullptr;
-BLEClient* cscClient = nullptr;         // Client for SPEED sensor
-BLEClient* powerClient = nullptr;       // Client for POWER meter
-BLEClient* cadenceClient = nullptr;     // Client for CADENCE sensor
-BLEAdvertisedDevice* foundCSCDevice = nullptr; // Found SPEED sensor candidate
-BLEAdvertisedDevice* foundPowerDevice = nullptr; // Found POWER meter candidate
-BLEAdvertisedDevice* foundCadenceDevice = nullptr; // Found CADENCE sensor candidate
-bool cscConnected = false;              // Speed sensor connected state
-bool powerConnected = false;            // Power meter connected state
-bool cadenceConnected = false;          // Cadence sensor connected state
+BLEClient* cscClient = nullptr;
+BLEClient* powerClient = nullptr;
+BLEClient* cadenceClient = nullptr;
+BLEAdvertisedDevice* foundCSCDevice = nullptr;
+BLEAdvertisedDevice* foundPowerDevice = nullptr;
+BLEAdvertisedDevice* foundCadenceDevice = nullptr;
+bool cscConnected = false;
+bool powerConnected = false;
+bool cadenceConnected = false;
 bool bleInitAttempted = false;
 static bool bleScanInProgress = false;
 
 // --- Sensor Raw Data ---
-float currentSpeedKph = 0.0f;       // From BLE Speed Sensor
-float currentPower = 0.0f;          // From BLE Power Meter
+float currentSpeedKph = 0.0f;
+float currentPower = 0.0f;
 float lastPressure = 0.0f;
 float lastTemp = 0.0f;
 float DeltaAirPress = 0.0f;
@@ -108,14 +108,14 @@ sensors_event_t accel, gyro, temp_imu;
 
 // --- Speed Calculation (from Speed Sensor) ---
 uint32_t lastWheelRevs = 0;
-uint16_t lastWheelEventTime = 0;    // 1/1024s
-unsigned long lastNonZeroRevTime = 0; // ms
+uint16_t lastWheelEventTime = 0;
+unsigned long lastNonZeroRevTime = 0;
 
 // --- Cadence Calculation (from Cadence Sensor) ---
-uint16_t lastCrankRevs = 0;         // From cadence sensor data
-uint16_t lastCrankEventTime = 0;    // 1/1024s, from cadence sensor data
-unsigned long lastNonZeroCrankTime = 0; // ms, updated by cadence callback
-float currentCadenceRadPerSec = 0.0f; // Calculated cadence in rad/s
+uint16_t lastCrankRevs = 0;
+uint16_t lastCrankEventTime = 0;
+unsigned long lastNonZeroCrankTime = 0;
+float currentCadenceRadPerSec = 0.0f;
 
 // --- Sensor Readiness ---
 bool icmReady = false;
@@ -145,14 +145,14 @@ static unsigned long lastDisplayUpdateMillis = 0;
 void updateLEDStatus(SystemStatus status, bool forceUpdate = false);
 void dumpCSVOverSerial();
 void connectBLEDevices();
-void speedNotifyCallback(BLERemoteCharacteristic* pChar, uint8_t* pData, size_t length, bool isNotify); // Renamed
-void powerNotifyCallback(BLERemoteCharacteristic* pChar, uint8_t* pData, size_t length, bool isNotify); // Reverted
-void cadenceNotifyCallback(BLERemoteCharacteristic* pChar, uint8_t* pData, size_t length, bool isNotify); // New
+void speedNotifyCallback(BLERemoteCharacteristic* pChar, uint8_t* pData, size_t length, bool isNotify);
+void powerNotifyCallback(BLERemoteCharacteristic* pChar, uint8_t* pData, size_t length, bool isNotify);
+void cadenceNotifyCallback(BLERemoteCharacteristic* pChar, uint8_t* pData, size_t length, bool isNotify);
 void flushLogBuffer();
 bool setMplOsr(uint8_t osr);
-bool setupSpeedNotifications(BLEClient* client);    // Renamed
+bool setupSpeedNotifications(BLEClient* client);
 bool setupPowerNotifications(BLEClient* client);
-bool setupCadenceNotifications(BLEClient* client);  // New
+bool setupCadenceNotifications(BLEClient* client);
 float airspeedPaToKph(float pressure_pa);
 void initDisplay();
 void updateDisplay(float currentRawDeltaP);
@@ -164,25 +164,19 @@ void updateDisplay(float currentRawDeltaP);
 #define MPL3115A2_CTRL_REG1 (0x26)
 #endif
 
-#define KNOWN_SPEED_ADDRESS   "cd:0e:f8:71:4b:6f"   // Confirmed by user
-#define KNOWN_CADENCE_ADDRESS "cc:22:bf:b6:3b:02"   // From previous log
-#define KNOWN_POWER_ADDRESS   "fa:95:b1:c2:fb:5e"   // From previous log
+#define KNOWN_SPEED_ADDRESS   "cd:0e:f8:71:4b:6f"
+#define KNOWN_CADENCE_ADDRESS "cc:22:bf:b6:3b:02"
+#define KNOWN_POWER_ADDRESS   "fa:95:b1:c2:fb:5e"
 // =============================================================
 // ==             BLE Callback Class Definition             ==
 // =============================================================
-// =============================================================
-// ==             BLE Callback Class Definition             ==
-// =============================================================
-// =============================================================
-// ==             BLE Callback Class Definition             ==
-// =============================================================
+
 class MyAdvertisedDeviceCallbacks : public BLEAdvertisedDeviceCallbacks {
   // --- onResult ---
   void onResult(BLEAdvertisedDevice advertisedDevice) {
      bool changed = false;
-     String currentDeviceAddress = advertisedDevice.getAddress().toString(); // Use Arduino 
+     String currentDeviceAddress = advertisedDevice.getAddress().toString();
 
-     // --- Check against KNOWN addresses FIRST ---
 
      #ifdef KNOWN_SPEED_ADDRESS
      if (!cscConnected && foundCSCDevice == nullptr &&
@@ -217,9 +211,8 @@ class MyAdvertisedDeviceCallbacks : public BLEAdvertisedDeviceCallbacks {
      }
      #endif
 
-     // --- Fallback to Discovery Order (if known addresses not defined/found) ---
 
-     // Power Meter (Discovery Fallback)
+
      #ifndef KNOWN_POWER_ADDRESS
      if (!powerConnected && foundPowerDevice == nullptr && advertisedDevice.isAdvertisingService(CYCLING_POWER_SERVICE_UUID)) {
         Serial.print("Found Power Candidate (Discovery): "); Serial.println(currentDeviceAddress.c_str());
@@ -228,17 +221,17 @@ class MyAdvertisedDeviceCallbacks : public BLEAdvertisedDeviceCallbacks {
       }
      #endif
 
-     // CSC Devices (Discovery Fallback)
+
      if (advertisedDevice.isAdvertisingService(CSC_SERVICE_UUID)) {
-         // Speed Sensor (Discovery Fallback)
+
          #ifndef KNOWN_SPEED_ADDRESS
          if (!cscConnected && foundCSCDevice == nullptr) {
-             // Ensure it's not the already assigned known cadence/power sensor
+
              #ifdef KNOWN_CADENCE_ADDRESS
-               if (currentDeviceAddress == KNOWN_CADENCE_ADDRESS) goto skip_csc_discovery; // Already assigned
+               if (currentDeviceAddress == KNOWN_CADENCE_ADDRESS) goto skip_csc_discovery;
              #endif
              #ifdef KNOWN_POWER_ADDRESS
-               if (currentDeviceAddress == KNOWN_POWER_ADDRESS) goto skip_csc_discovery; // Already assigned
+               if (currentDeviceAddress == KNOWN_POWER_ADDRESS) goto skip_csc_discovery;
              #endif
 
              Serial.print("Found CSC Candidate 1 (Assuming Speed - Discovery): "); Serial.println(currentDeviceAddress.c_str());
@@ -247,11 +240,11 @@ class MyAdvertisedDeviceCallbacks : public BLEAdvertisedDeviceCallbacks {
          }
          #endif
 
-         // Cadence Sensor (Discovery Fallback)
+
          #ifndef KNOWN_CADENCE_ADDRESS
          if (!cadenceConnected && foundCadenceDevice == nullptr) {
-             // Make sure it's not the already assigned known speed/power sensor
-             // AND not the already assigned *discovered* speed sensor
+
+
              bool assigned_as_known_speed = false;
              bool assigned_as_known_power = false;
              bool assigned_as_discovered_speed = false;
@@ -274,9 +267,9 @@ class MyAdvertisedDeviceCallbacks : public BLEAdvertisedDeviceCallbacks {
          }
          #endif
      }
-     skip_csc_discovery:; // Label for goto jump
+     skip_csc_discovery:;
 
-    // --- Stop Scan Logic (Same as before) ---
+
     bool gotSpeedCandidate = cscConnected || (foundCSCDevice != nullptr);
     bool gotPowerCandidate = powerConnected || (foundPowerDevice != nullptr);
     bool gotCadenceCandidate = cadenceConnected || (foundCadenceDevice != nullptr);
@@ -285,7 +278,7 @@ class MyAdvertisedDeviceCallbacks : public BLEAdvertisedDeviceCallbacks {
       if(pBLEScan != nullptr && bleScanInProgress) {
            Serial.println("Found candidates/matches for all needed devices. Stopping scan early.");
            pBLEScan->stop();
-           bleScanInProgress = false; // Set flag immediately when stopping early
+           bleScanInProgress = false;
       }
     }
   }
@@ -311,11 +304,11 @@ void setup() {
 
   Serial.println("Mounting SPIFFS...");
   if (!SPIFFS.begin(true)) {
-    Serial.println("❌ SPIFFS mount failed!");
+    Serial.println(" SPIFFS mount failed!");
     updateLEDStatus(STATUS_ERROR, true);
     while (1) delay(10);
   }
-  Serial.println("✅ SPIFFS Mounted.");
+  Serial.println(" SPIFFS Mounted.");
   if (digitalRead(MODE_PIN) == LOW) {
     Serial.println(" DUMP MODE DETECTED ");
     dumpCSVOverSerial();
@@ -334,27 +327,27 @@ void setup() {
 
   Serial.println("Initializing I2C Sensors...");
   if (!icm.begin_I2C()) {
-    Serial.println("❌ ICM20948 not found"); updateLEDStatus(STATUS_ERROR, true); while (1) delay(10);
+    Serial.println(" ICM20948 not found"); updateLEDStatus(STATUS_ERROR, true); while (1) delay(10);
   }
   icm.setAccelRateDivisor(ICM_ACCEL_RATE_DIV);
   icm.setGyroRateDivisor(ICM_GYRO_RATE_DIV);
   icmReady = true;
-  Serial.println("✅ ICM20948 ready");
+  Serial.println(" ICM20948 ready");
 
   if (!mpl.begin()) {
-    Serial.println("❌ MPL3115A2 not found"); updateLEDStatus(STATUS_ERROR, true); while (1) delay(10);
+    Serial.println(" MPL3115A2 not found"); updateLEDStatus(STATUS_ERROR, true); while (1) delay(10);
   }
   mplReady = true;
-  Serial.println("✅ MPL3115A2 ready");
+  Serial.println(" MPL3115A2 ready");
   if (!setMplOsr(MPL_OSR_SETTING)) {
-      Serial.println("⚠️ Failed to set MPL3115A2 OSR.");
+      Serial.println(" Failed to set MPL3115A2 OSR.");
   }
 
   if (!ms4525do.Begin()) {
-    Serial.println("❌ MS4525DO not found"); updateLEDStatus(STATUS_ERROR, true); while (1) delay(10);
+    Serial.println(" MS4525DO not found"); updateLEDStatus(STATUS_ERROR, true); while (1) delay(10);
   }
   ms4525Ready = true;
-  Serial.println("✅ MS4525DO ready");
+  Serial.println(" MS4525DO ready");
 
   Serial.println("Initializing BLE...");
   BLEDevice::init("");
@@ -380,7 +373,7 @@ void loop() {
   // --- 1. Handle BLE Connection State ---
   bool needScanOrConnect = false;
   if (!bleInitAttempted) needScanOrConnect = true;
-  // Check if we need to find or connect to any of the three sensors
+
   if (!cscConnected && foundCSCDevice == nullptr) needScanOrConnect = true;
   if (!powerConnected && foundPowerDevice == nullptr) needScanOrConnect = true;
   if (!cadenceConnected && foundCadenceDevice == nullptr) needScanOrConnect = true;
@@ -391,32 +384,32 @@ void loop() {
 
   if (needScanOrConnect) {
     static unsigned long lastBleActionAttempt = 0;
-    // Don't try connecting immediately after a failed scan/connect attempt
+
     if (nowMillis - lastBleActionAttempt >= BLE_CONNECT_RETRY_INTERVAL_MS) {
-      connectBLEDevices(); // This function handles both scanning and connecting
+      connectBLEDevices();
       lastBleActionAttempt = nowMillis;
-      bleInitAttempted = true; // Mark that we've tried at least once
+      bleInitAttempted = true;
     }
   }
 
   // --- Check for unexpected disconnections ---
   if (cscConnected && (cscClient == nullptr || !cscClient->isConnected())) {
-    Serial.println("⚠️ Speed Sensor Disconnected Unexpectedly");
+    Serial.println(" Speed Sensor Disconnected Unexpectedly");
     cscConnected = false;
-    // Should we try to reconnect? The logic above will trigger a scan/connect next cycle
+
   }
   if (powerConnected && (powerClient == nullptr || !powerClient->isConnected())) {
-    Serial.println("⚠️ Power Meter Disconnected Unexpectedly");
+    Serial.println(" Power Meter Disconnected Unexpectedly");
     powerConnected = false;
   }
    if (cadenceConnected && (cadenceClient == nullptr || !cadenceClient->isConnected())) {
-    Serial.println("⚠️ Cadence Sensor Disconnected Unexpectedly");
+    Serial.println(" Cadence Sensor Disconnected Unexpectedly");
     cadenceConnected = false;
   }
 
   // --- 2. Determine System Readiness & Status ---
   bool allSensorsReady = icmReady && mplReady && ms4525Ready;
-  // Now requires all *three* BLE devices to be connected
+
   bool allBleReady = cscConnected && powerConnected && cadenceConnected;
   bool systemReady = allSensorsReady && allBleReady;
 
@@ -426,8 +419,8 @@ void loop() {
   } else if (systemReady) {
     currentStatus = STATUS_READY;
   } else if (!allSensorsReady) {
-    currentStatus = STATUS_ERROR; // Prioritize sensor HW error
-  } else { // I2C sensors okay, but BLE not ready
+    currentStatus = STATUS_ERROR;
+  } else {
     currentStatus = STATUS_CONNECTING;
   }
   updateLEDStatus(currentStatus, currentStatus != previousStatus);
@@ -450,13 +443,13 @@ void loop() {
         }
         File file = SPIFFS.open(LOG_FILENAME, FILE_WRITE);
         if (!file) {
-           Serial.println("❌ Failed to create log file!");
+           Serial.println(" Failed to create log file!");
            updateLEDStatus(STATUS_ERROR, true);
         } else {
-           // Header updated to reflect cadence source is now separate sensor
+
            file.println("Time,AccelX,AccelY,AccelZ,GyroX,GyroY,GyroZ,Pressure,Temp,DeltaP,AirspeedTemp,SpeedKPH,PowerW,AirspeedKPH,CadenceRPM");
            file.close();
-           Serial.println("✅ Recording starting.");
+           Serial.println(" Recording starting.");
 
            recordingStarted = true;
            logBuffer = "";
@@ -464,7 +457,7 @@ void loop() {
            lastFlushMillis = nowMillis;
         }
       } else {
-         Serial.println("❌ Cannot start recording: System not ready!");
+         Serial.println(" Cannot start recording: System not ready!");
          if (!allSensorsReady) Serial.println(" -> I2C sensors not ready.");
          if (!allBleReady) {
              Serial.print(" -> BLE not ready: Speed="); Serial.print(cscConnected);
@@ -494,11 +487,11 @@ void loop() {
   if (recordingStarted && (nowMillis - lastLogMillis >= LOG_INTERVAL_MS)) {
     lastLogMillis += LOG_INTERVAL_MS;
     if (lastLogMillis < nowMillis - LOG_INTERVAL_MS) {
-        lastLogMillis = nowMillis; // Prevent excessive catch-up if loop is slow
+        lastLogMillis = nowMillis;
     }
 
     float currentAirspeedKph = airspeedPaToKph(DeltaAirPress);
-    // Convert cadence from rad/s to RPM for logging
+
     float currentCadenceRPM = currentCadenceRadPerSec * (60.0f / (2.0f * PI));
 
     char csvLine[CSV_BUFFER_LINE_LENGTH];
@@ -515,10 +508,10 @@ void loop() {
              CSV_PRECISION_TEMP, lastTemp,
              CSV_PRECISION_AIRSPEED, DeltaAirPress,
              CSV_PRECISION_TEMP, lastAirTemp,
-             CSV_PRECISION_SPEED_KPH, currentSpeedKph,  // Wheel speed
-             CSV_PRECISION_POWER, currentPower,         // Power
-             CSV_PRECISION_WINDSPEED, currentAirspeedKph, // Calculated airspeed
-             CSV_PRECISION_CADENCE, currentCadenceRPM   // Cadence in RPM
+             CSV_PRECISION_SPEED_KPH, currentSpeedKph,
+             CSV_PRECISION_POWER, currentPower,
+             CSV_PRECISION_WINDSPEED, currentAirspeedKph,
+             CSV_PRECISION_CADENCE, currentCadenceRPM
             );
 
     logBuffer += csvLine;
@@ -555,11 +548,11 @@ void updateLEDStatus(SystemStatus status, bool forceUpdate) {
   if (status != lastDisplayedStatus) {
       Serial.print("System Status -> ");
       switch (status) {
-          case STATUS_ERROR: Serial.println("🔴 ERROR"); break;
-          case STATUS_CONNECTING: Serial.println("🔵 CONNECTING"); break;
-          case STATUS_READY: Serial.println("🟢 READY"); break;
-          case STATUS_RECORDING: Serial.println("🟣 RECORDING"); break;
-          default: Serial.println("⚪ UNKNOWN"); break;
+          case STATUS_ERROR: Serial.println(" ERROR"); break;
+          case STATUS_CONNECTING: Serial.println(" CONNECTING"); break;
+          case STATUS_READY: Serial.println(" READY"); break;
+          case STATUS_RECORDING: Serial.println(" RECORDING"); break;
+          default: Serial.println(" UNKNOWN"); break;
       }
   }
   lastDisplayedStatus = status;
@@ -578,27 +571,27 @@ void updateLEDStatus(SystemStatus status, bool forceUpdate) {
   pixel.show();
 }
 
-// --- setupSpeedNotifications --- (Renamed from setupCSCNotifications)
+// --- setupSpeedNotifications ---
 bool setupSpeedNotifications(BLEClient* client) {
     if (!client || !client->isConnected()) return false;
     Serial.println("Setting up Speed Notifications...");
     BLERemoteService* pRemoteService = nullptr;
     BLERemoteCharacteristic* pRemoteCharacteristic = nullptr;
     try { pRemoteService = client->getService(CSC_SERVICE_UUID); } catch (...) { return false; }
-    if (!pRemoteService) { Serial.println("  ❌ Failed to find CSC service (for Speed)"); return false; }
+    if (!pRemoteService) { Serial.println("   Failed to find CSC service (for Speed)"); return false; }
     try { pRemoteCharacteristic = pRemoteService->getCharacteristic(CSC_MEASUREMENT_CHAR_UUID); } catch (...) { return false; }
-    if (!pRemoteCharacteristic) { Serial.println("  ❌ Failed to find CSC characteristic (for Speed)"); return false; }
+    if (!pRemoteCharacteristic) { Serial.println("   Failed to find CSC characteristic (for Speed)"); return false; }
     if (pRemoteCharacteristic->canNotify()) {
         try {
-             // Register the specific callback for speed
+
              pRemoteCharacteristic->registerForNotify(speedNotifyCallback, true);
-             Serial.println("  ✅ Speed Notification registration attempted.");
+             Serial.println("   Speed Notification registration attempted.");
              return true;
         } catch (...) {
-             Serial.println("  ❌ Exception during speed notify registration.");
+             Serial.println("   Exception during speed notify registration.");
              return false;
         }
-    } else { Serial.println("  ❌ CSC characteristic (for Speed) does not support notifications!"); return false; }
+    } else { Serial.println("   CSC characteristic (for Speed) does not support notifications!"); return false; }
 }
 
 // --- setupPowerNotifications ---
@@ -608,92 +601,91 @@ bool setupPowerNotifications(BLEClient* client) {
     BLERemoteService* pRemoteService = nullptr;
     BLERemoteCharacteristic* pRemoteCharacteristic = nullptr;
     try { pRemoteService = client->getService(CYCLING_POWER_SERVICE_UUID); } catch (...) { return false; }
-    if (!pRemoteService) { Serial.println("  ❌ Failed to find Power service"); return false; }
+    if (!pRemoteService) { Serial.println("   Failed to find Power service"); return false; }
     try { pRemoteCharacteristic = pRemoteService->getCharacteristic(CYCLING_POWER_MEASUREMENT_CHAR_UUID); } catch (...) { return false; }
-    if (!pRemoteCharacteristic) { Serial.println("  ❌ Failed to find Power characteristic"); return false; }
+    if (!pRemoteCharacteristic) { Serial.println("   Failed to find Power characteristic"); return false; }
     if (pRemoteCharacteristic->canNotify()) {
          try {
              pRemoteCharacteristic->registerForNotify(powerNotifyCallback, true);
-             Serial.println("  ✅ Power Notification registration attempted.");
+             Serial.println("   Power Notification registration attempted.");
              return true;
          } catch (...) {
-             Serial.println("  ❌ Exception during power notify registration.");
+             Serial.println("   Exception during power notify registration.");
              return false;
          }
-    } else { Serial.println("  ❌ Power characteristic does not support notifications!"); return false; }
+    } else { Serial.println("   Power characteristic does not support notifications!"); return false; }
 }
 
-// --- setupCadenceNotifications --- (New Function)
+// --- setupCadenceNotifications ---
 bool setupCadenceNotifications(BLEClient* client) {
     if (!client || !client->isConnected()) return false;
     Serial.println("Setting up Cadence Notifications...");
     BLERemoteService* pRemoteService = nullptr;
     BLERemoteCharacteristic* pRemoteCharacteristic = nullptr;
     try { pRemoteService = client->getService(CSC_SERVICE_UUID); } catch (...) { return false; }
-    if (!pRemoteService) { Serial.println("  ❌ Failed to find CSC service (for Cadence)"); return false; }
+    if (!pRemoteService) { Serial.println("   Failed to find CSC service (for Cadence)"); return false; }
     try { pRemoteCharacteristic = pRemoteService->getCharacteristic(CSC_MEASUREMENT_CHAR_UUID); } catch (...) { return false; }
-    if (!pRemoteCharacteristic) { Serial.println("  ❌ Failed to find CSC characteristic (for Cadence)"); return false; }
+    if (!pRemoteCharacteristic) { Serial.println("   Failed to find CSC characteristic (for Cadence)"); return false; }
     if (pRemoteCharacteristic->canNotify()) {
         try {
-             // Register the specific callback for cadence
+
              pRemoteCharacteristic->registerForNotify(cadenceNotifyCallback, true);
-             Serial.println("  ✅ Cadence Notification registration attempted.");
+             Serial.println("   Cadence Notification registration attempted.");
              return true;
          } catch (...) {
-             Serial.println("  ❌ Exception during cadence notify registration.");
+             Serial.println("   Exception during cadence notify registration.");
             return false;
         }
-    } else { Serial.println("  ❌ CSC characteristic (for Cadence) does not support notifications!"); return false; }
+    } else { Serial.println("   CSC characteristic (for Cadence) does not support notifications!"); return false; }
 }
 
 
 // --- connectBLEDevices ---
 void connectBLEDevices() {
-    // --- Start Scan if necessary ---
+
     bool needScan = (!cscConnected && foundCSCDevice == nullptr) ||
                     (!powerConnected && foundPowerDevice == nullptr) ||
                     (!cadenceConnected && foundCadenceDevice == nullptr);
 
     if (needScan && pBLEScan != nullptr && !bleScanInProgress) {
-        Serial.print("🔍 Starting BLE scan for missing devices...");
-        // Clear old candidates only if not connected
+        Serial.print(" Starting BLE scan for missing devices...");
+
         if (!cscConnected && foundCSCDevice) { delete foundCSCDevice; foundCSCDevice = nullptr; }
         if (!powerConnected && foundPowerDevice) { delete foundPowerDevice; foundPowerDevice = nullptr; }
         if (!cadenceConnected && foundCadenceDevice) { delete foundCadenceDevice; foundCadenceDevice = nullptr; }
 
         bleScanInProgress = true;
-        // Scan completion callback sets bleScanInProgress = false
+
         pBLEScan->start(BLE_SCAN_DURATION_S, [](BLEScanResults r){ bleScanInProgress = false; Serial.println(" Scan Finished."); }, false);
-        // Note: Scan runs asynchronously. Connection attempts happen below *after* the scan might have found devices.
+
     } else if (bleScanInProgress) {
         Serial.println("(Scan already in progress...)");
-        return; // Don't try to connect while actively scanning
+        return;
     }
 
-    // --- Attempt Connections (if candidates found and not already connected) ---
 
-    // 1. Speed Sensor
+
     if (!cscConnected && foundCSCDevice != nullptr) {
         if (cscClient == nullptr) cscClient = BLEDevice::createClient();
-        if (cscClient && !cscClient->isConnected()) { // Check client exists and is not connected
+        if (cscClient && !cscClient->isConnected()) {
             Serial.print("Attempting Speed Connect to: "); Serial.println(foundCSCDevice->getAddress().toString().c_str());
             bool connectSuccess = false;
             try { connectSuccess = cscClient->connect(foundCSCDevice); } catch (...) { connectSuccess = false; }
             if (connectSuccess) {
-                Serial.println("✅ Speed Sensor Connected.");
+                Serial.println(" Speed Sensor Connected.");
                 if (setupSpeedNotifications(cscClient)) {
                     cscConnected = true;
-                    delete foundCSCDevice; // Success, clean up
+                    delete foundCSCDevice;
                     foundCSCDevice = nullptr;
-                } else { Serial.println("❌ Speed Setup Failed. Disconnecting."); cscClient->disconnect(); }
-            } else { Serial.println("❌ Speed connect() call failed."); /* Don't delete candidate, try again later */ }
+                } else { Serial.println(" Speed Setup Failed. Disconnecting."); cscClient->disconnect(); }
+            } else { Serial.println(" Speed connect() call failed."); }
         } else if (cscClient && cscClient->isConnected()){
-             // Already connected, just ensure state is right and clean up candidate
+
              delete foundCSCDevice; foundCSCDevice = nullptr; cscConnected = true;
         }
     }
 
-    // 2. Power Meter
+
     if (!powerConnected && foundPowerDevice != nullptr) {
          if (powerClient == nullptr) powerClient = BLEDevice::createClient();
          if (powerClient && !powerClient->isConnected()) {
@@ -701,17 +693,17 @@ void connectBLEDevices() {
             bool connectSuccess = false;
             try { connectSuccess = powerClient->connect(foundPowerDevice); } catch (...) { connectSuccess = false; }
             if (connectSuccess) {
-                Serial.println("✅ Power Meter Connected.");
+                Serial.println(" Power Meter Connected.");
                 if (setupPowerNotifications(powerClient)) {
                      powerConnected = true; delete foundPowerDevice; foundPowerDevice = nullptr;
-                 } else { Serial.println("❌ Power Setup Failed. Disconnecting."); powerClient->disconnect(); }
-            } else { Serial.println("❌ Power connect() call failed."); }
+                 } else { Serial.println(" Power Setup Failed. Disconnecting."); powerClient->disconnect(); }
+            } else { Serial.println(" Power connect() call failed."); }
         } else if (powerClient && powerClient->isConnected()){
              delete foundPowerDevice; foundPowerDevice = nullptr; powerConnected = true;
         }
     }
 
-     // 3. Cadence Sensor
+
     if (!cadenceConnected && foundCadenceDevice != nullptr) {
         if (cadenceClient == nullptr) cadenceClient = BLEDevice::createClient();
         if (cadenceClient && !cadenceClient->isConnected()) {
@@ -719,11 +711,11 @@ void connectBLEDevices() {
             bool connectSuccess = false;
             try { connectSuccess = cadenceClient->connect(foundCadenceDevice); } catch (...) { connectSuccess = false; }
             if (connectSuccess) {
-                Serial.println("✅ Cadence Sensor Connected.");
+                Serial.println(" Cadence Sensor Connected.");
                 if (setupCadenceNotifications(cadenceClient)) {
                      cadenceConnected = true; delete foundCadenceDevice; foundCadenceDevice = nullptr;
-                 } else { Serial.println("❌ Cadence Setup Failed. Disconnecting."); cadenceClient->disconnect(); }
-            } else { Serial.println("❌ Cadence connect() call failed."); }
+                 } else { Serial.println(" Cadence Setup Failed. Disconnecting."); cadenceClient->disconnect(); }
+            } else { Serial.println(" Cadence connect() call failed."); }
         } else if (cadenceClient && cadenceClient->isConnected()){
              delete foundCadenceDevice; foundCadenceDevice = nullptr; cadenceConnected = true;
         }
@@ -736,7 +728,7 @@ void flushLogBuffer() {
   if (logBuffer.length() == 0) return;
   File file = SPIFFS.open(LOG_FILENAME, FILE_APPEND);
   if (!file) {
-    Serial.println("❌ Failed to open log file for flushing!");
+    Serial.println(" Failed to open log file for flushing!");
     updateLEDStatus(STATUS_ERROR, true);
     return;
   }
@@ -745,10 +737,10 @@ void flushLogBuffer() {
   if (written == logBuffer.length()) {
      logBuffer = "";
   } else {
-      Serial.print("❌ Log buffer flush failed! Expected "); Serial.print(logBuffer.length());
+      Serial.print(" Log buffer flush failed! Expected "); Serial.print(logBuffer.length());
       Serial.print(" wrote "); Serial.println(written);
       updateLEDStatus(STATUS_ERROR, true);
-      if (written > 0) logBuffer.remove(0, written); // Remove partial write
+      if (written > 0) logBuffer.remove(0, written);
   }
   lastFlushMillis = millis();
 }
@@ -766,20 +758,19 @@ bool setMplOsr(uint8_t osr) {
   return true;
 }
 
-// --- speedNotifyCallback --- (Renamed from notifyCallback)
-// Parses CSC Measurement data, focusing on Wheel Revolution Data
+// --- speedNotifyCallback ---
 void speedNotifyCallback(BLERemoteCharacteristic* pChar, uint8_t* pData, size_t length, bool isNotify) {
     if (pData == nullptr || length == 0) return;
 
     uint8_t flags = pData[0];
-    bool wheelDataPresent = flags & 0x01; // Bit 0
+    bool wheelDataPresent = flags & 0x01;
     size_t offset = 1;
 
     if (wheelDataPresent) {
-        if (length < offset + 6) return; // Need 4 bytes revs, 2 bytes time
+        if (length < offset + 6) return;
 
         uint32_t cumulativeRevs = pData[offset] | (pData[offset+1] << 8) | (pData[offset+2] << 16) | (pData[offset+3] << 24);
-        uint16_t wheelEventTime_1024 = pData[offset+4] | (pData[offset+5] << 8); // Unit 1/1024s
+        uint16_t wheelEventTime_1024 = pData[offset+4] | (pData[offset+5] << 8);
 
         uint32_t timeDelta_1024 = (wheelEventTime_1024 >= lastWheelEventTime) ?
                                   (wheelEventTime_1024 - lastWheelEventTime) :
@@ -802,14 +793,14 @@ void speedNotifyCallback(BLERemoteCharacteristic* pChar, uint8_t* pData, size_t 
         }
         lastWheelRevs = cumulativeRevs;
         lastWheelEventTime = wheelEventTime_1024;
-        // offset += 6; // Only needed if parsing crank data *after* wheel data in same callback
+
     } else {
-        // Wheel data not present, check timeout
+
         if (millis() - lastNonZeroRevTime > BLE_SPEED_TIMEOUT_MS) {
              currentSpeedKph = 0.0f;
          }
     }
-    // Ignore Crank data (Bit 1) in this callback
+
 }
 
 // --- airspeedPaToKph ---
@@ -821,44 +812,42 @@ float airspeedPaToKph(float pressure_pa) {
     return speed_mps * 3.6f;
 }
 
-// --- powerNotifyCallback --- (Reverted - Only parses mandatory power)
+// --- powerNotifyCallback ---
 void powerNotifyCallback(BLERemoteCharacteristic* pChar, uint8_t* pData, size_t length, bool isNotify) {
-    // Parse Cycling Power Measurement characteristic data (UUID 0x2A63)
-    // Only parsing mandatory fields: Flags and Instantaneous Power
 
-    if (pData == nullptr || length < 4) return; // Minimum length for Flags(2) + Power(2)
 
-    // uint16_t flags = pData[0] | (pData[1] << 8); // Flags needed if parsing optional fields
-    int16_t watts = pData[2] | (pData[3] << 8); // Instantaneous Power
+    if (pData == nullptr || length < 4) return;
+
+
+    int16_t watts = pData[2] | (pData[3] << 8);
     currentPower = (float)watts;
 
-    // No parsing of optional fields (like cadence) here anymore.
+
 }
 
-// --- cadenceNotifyCallback --- (New Function)
-// Parses CSC Measurement data, focusing on Crank Revolution Data
+// --- cadenceNotifyCallback ---
 void cadenceNotifyCallback(BLERemoteCharacteristic* pChar, uint8_t* pData, size_t length, bool isNotify) {
     if (pData == nullptr || length == 0) return;
 
     uint8_t flags = pData[0];
-    bool wheelDataPresent = flags & 0x01; // Bit 0
-    bool crankDataPresent = flags & 0x02; // Bit 1
+    bool wheelDataPresent = flags & 0x01;
+    bool crankDataPresent = flags & 0x02;
     size_t offset = 1;
 
-    // Advance offset if wheel data is present *before* crank data
+
     if (wheelDataPresent) {
-        if (length < offset + 6) return; // Check length before advancing
+        if (length < offset + 6) return;
         offset += 6;
     }
 
-    // Now check for crank data at the current offset
+
     if (crankDataPresent) {
-        if (length < offset + 4) return; // Need 2 bytes revs, 2 bytes time
+        if (length < offset + 4) return;
 
         uint16_t cumulativeCrankRevs = pData[offset] | (pData[offset+1] << 8);
-        uint16_t crankEventTime_1024 = pData[offset+2] | (pData[offset+3] << 8); // Unit 1/1024s
+        uint16_t crankEventTime_1024 = pData[offset+2] | (pData[offset+3] << 8);
 
-        // --- Calculation logic (same as before, but using dedicated sensor data) ---
+
         uint32_t timeDelta_1024 = (crankEventTime_1024 >= lastCrankEventTime) ?
                                   (crankEventTime_1024 - lastCrankEventTime) :
                                   ((0xFFFF - lastCrankEventTime) + crankEventTime_1024 + 1);
@@ -878,10 +867,10 @@ void cadenceNotifyCallback(BLERemoteCharacteristic* pChar, uint8_t* pData, size_
         }
         lastCrankRevs = cumulativeCrankRevs;
         lastCrankEventTime = crankEventTime_1024;
-        // offset += 4; // Only needed if parsing data *after* crank data
+
 
     } else {
-        // Crank data flag not set, check timeout
+
         if (millis() - lastNonZeroCrankTime > BLE_CADENCE_TIMEOUT_MS) {
             currentCadenceRadPerSec = 0.0f;
         }
@@ -894,7 +883,7 @@ void dumpCSVOverSerial() {
   Serial.print("Attempting to dump log file: "); Serial.println(LOG_FILENAME);
   File file = SPIFFS.open(LOG_FILENAME, "r");
   if (!file || file.isDirectory()) {
-    Serial.println("❌ Log file not found or is directory.");
+    Serial.println(" Log file not found or is directory.");
     updateLEDStatus(STATUS_ERROR, true); delay(3000); return;
   }
   Serial.println("\n\n--- START LOG DUMP ---");
@@ -923,9 +912,9 @@ void initDisplay() {
     tft.initR(INITR_MINI160x80);
     tft.setRotation(1);
     tft.fillScreen(ST77XX_BLACK);
-    Serial.println("✅ TFT Initialized.");
+    Serial.println(" TFT Initialized.");
     if (TFT_BLK >= 0) {
-        pinMode(TFT_BLK, OUTPUT); digitalWrite(TFT_BLK, HIGH); Serial.println("✅ TFT Backlight ON.");
+        pinMode(TFT_BLK, OUTPUT); digitalWrite(TFT_BLK, HIGH); Serial.println(" TFT Backlight ON.");
     } else { Serial.println("-> TFT Backlight pin not defined or controlled."); }
 }
 
@@ -934,7 +923,7 @@ void updateDisplay(float currentRawDeltaP) {
     tft.fillScreen(ST77XX_BLACK);
     tft.setTextWrap(false);
 
-    // Status Line
+
     tft.setTextSize(1);
     tft.setCursor(5, 5);
     tft.setTextColor(ST77XX_YELLOW);
@@ -947,7 +936,7 @@ void updateDisplay(float currentRawDeltaP) {
         default:                tft.setTextColor(ST77XX_WHITE);  tft.print("UNKNOWN"); break;
     }
 
-    // Power Display
+
     tft.setTextSize(2);
     tft.setTextColor(ST77XX_WHITE);
     tft.setCursor(5, 25);
@@ -955,15 +944,15 @@ void updateDisplay(float currentRawDeltaP) {
     if (powerConnected) { tft.print(currentPower, 0); } else { tft.print("---"); }
     tft.print("W ");
 
-    // Speed Display
+
     int16_t x_speed_start = tft.width() / 2 + 5;
     tft.setCursor(x_speed_start, 25);
     tft.print("S:");
-     if (cscConnected) { // Speed sensor connected
+     if (cscConnected) {
        char speedStr[6]; dtostrf(currentSpeedKph, 4, 1, speedStr); tft.print(speedStr);
     } else { tft.print("--.-"); }
 
-    // Airspeed Display
+
     float currentAirspeedKph = airspeedPaToKph(currentRawDeltaP);
     tft.setTextSize(1);
     tft.setTextColor(ST77XX_CYAN);
@@ -974,19 +963,19 @@ void updateDisplay(float currentRawDeltaP) {
     } else { tft.print("--.-"); }
     tft.print("kph");
 
-    // Cadence Display (using dedicated sensor value)
+
      tft.setCursor(x_speed_start, 50);
      tft.setTextColor(ST77XX_ORANGE);
      tft.print("Cad: ");
-     if (cadenceConnected) { // Cadence sensor connected
+     if (cadenceConnected) {
          float cadenceRPM = currentCadenceRadPerSec * (60.0f / (2.0f * PI));
-         tft.print(cadenceRPM, 0); // Display RPM as integer
+         tft.print(cadenceRPM, 0);
      } else {
          tft.print("---");
      }
      tft.print("rpm");
 
-     // Speed Units
+
      tft.setTextSize(1);
      tft.setTextColor(ST77XX_WHITE);
      tft.setCursor(x_speed_start + 50, 35);

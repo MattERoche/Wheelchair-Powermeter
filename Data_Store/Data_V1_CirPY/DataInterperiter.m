@@ -245,13 +245,27 @@ legend('Percenatage influance of drag',Location='northwest')
 saveas(4,'Drag% PY','png')
 hold off
 
-figure Name 'Pitot' 
-plot(timeZero, Pitot_DP_offset_filter, 'LineWidth',2)
+
+figure Name '6' 
+plot(timeZero, gChairX_Filtered, 'LineWidth',2)
+hold on 
+grid on
+plot(timeZero, gChairZ_Filtered, 'LineWidth',2)
+xlabel('Time (s)');
+ylabel('Acceleration (m/(s^2))')
+title('Smoothed Accelerometer Trace')
+legend('Acceleration X','Acceleration Z',Location='northwest')
+
+hold off
+
+figure Name '9' 
+plot(timeZero, gChairX, 'LineWidth',2)
 hold on 
 grid on
 xlabel('Time (s)');
-ylabel('Pressure (Pa)');
-title('Delta Pressure Measured')
-legend('Raw Offset delta Pressure values',Location='northwest')
-saveas(Pitot,'PitotDP','png')
+ylabel('Acceleration (m/s^2)');
+title('Unfiltered Acceleration')
+ylabel('Vehicle Speed (m/s)')
+legend('Acceleration X',Location='northeast')
+saveas(9,'Accel Vs speed delay','png')
 hold off
